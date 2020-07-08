@@ -10,7 +10,7 @@
 #include "rf.h"
 
 
-#define JUMP_CH_COUNT    					(30*4)
+#define JUMP_CH_COUNT    					30        //频道总数
 #define DEV_ID         						20201001
 #define FRAME_SLOT_COUNT        			64   				//64个slot表示一帧
 #define RF_NO_RX_REBOOT_TICKS   			(100*120)			//120秒
@@ -19,6 +19,7 @@
 
 #define SENSOR_MAX_COUNT 					128
 
+#define PACKET_SEQ_MAX                      120
 
 
 
@@ -493,7 +494,7 @@ void rf_send_syn(uint8_t rf_index)
 	if(rf_index == RF1)
 	{		
 		rf_syn.head.packet_type = RF1_AP_SYN;
-		if(++rf_syn.head.packet_seq>=JUMP_CH_COUNT)
+		if(++rf_syn.head.packet_seq>=PACKET_SEQ_MAX)
 			rf_syn.head.packet_seq = 0;	
 		rf_set_ch(rf_index,ch_freq_list[0]);	
 	}
