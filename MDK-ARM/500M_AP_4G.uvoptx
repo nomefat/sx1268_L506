@@ -22,7 +22,7 @@
   </DaveTm>
 
   <Target>
-    <TargetName>etc_project</TargetName>
+    <TargetName>500M_AP_4G</TargetName>
     <ToolsetNumber>0x4</ToolsetNumber>
     <ToolsetName>ARM-ADS</ToolsetName>
     <TargetOption>
@@ -103,7 +103,7 @@
         <bEvRecOn>1</bEvRecOn>
         <bSchkAxf>0</bSchkAxf>
         <bTchkAxf>0</bTchkAxf>
-        <nTsel>4</nTsel>
+        <nTsel>6</nTsel>
         <sDll></sDll>
         <sDllPa></sDllPa>
         <sDlgDll></sDlgDll>
@@ -114,192 +114,21 @@
         <tDlgDll></tDlgDll>
         <tDlgPa></tDlgPa>
         <tIfile></tIfile>
-        <pMon>Segger\JL2CM3.dll</pMon>
+        <pMon>STLink\ST-LINKIII-KEIL_SWO.dll</pMon>
       </DebugOpt>
       <TargetDriverDllRegistry>
         <SetRegEntry>
           <Number>0</Number>
-          <Key>DLGUARM</Key>
-          <Name></Name>
-        </SetRegEntry>
-        <SetRegEntry>
-          <Number>0</Number>
           <Key>UL2CM3</Key>
-          <Name>UL2CM3(-S0 -C0 -P0  -FN1 -FC1000 -FD20000000 -FF0STM32F4xx_2048 -FL0200000 -FS08000000 -FP0($$Device:STM32F429IITx$CMSIS\Flash\STM32F4xx_2048.FLM)</Name>
+          <Name>UL2CM3(-S0 -C0 -P0 -FD20000000 -FC1000 -FN1 -FF0STM32F4xx_2048 -FS08000000 -FL0200000 -FP0($$Device:STM32F429IITx$CMSIS\Flash\STM32F4xx_2048.FLM))</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
-          <Key>JL2CM3</Key>
-          <Name>-U69661582 -O78 -S10 -ZTIFSpeedSel25000 -A0 -C0 -JU1 -JI127.0.0.1 -JP0 -RST0 -N00("ARM CoreSight SW-DP") -D00(2BA01477) -L00(0) -TO18 -TC10000000 -TP21 -TDS8001 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -TB1 -TFE0 -FO7 -FD20000000 -FC1000 -FN1 -FF0STM32F4xx_2048.FLM -FS08000000 -FL0200000 -FP0($$Device:STM32F429IITx$CMSIS\Flash\STM32F4xx_2048.FLM)</Name>
-        </SetRegEntry>
-        <SetRegEntry>
-          <Number>0</Number>
-          <Key>ARMRTXEVENTFLAGS</Key>
-          <Name>-L70 -Z18 -C0 -M0 -T1</Name>
-        </SetRegEntry>
-        <SetRegEntry>
-          <Number>0</Number>
-          <Key>DLGTARM</Key>
-          <Name>(1010=-1,-1,-1,-1,0)(1007=-1,-1,-1,-1,0)(1008=-1,-1,-1,-1,0)(1009=-1,-1,-1,-1,0)(1012=-1,-1,-1,-1,0)</Name>
-        </SetRegEntry>
-        <SetRegEntry>
-          <Number>0</Number>
-          <Key>ARMDBGFLAGS</Key>
-          <Name></Name>
+          <Key>ST-LINKIII-KEIL_SWO</Key>
+          <Name>-U-O142 -O2254 -S0 -C0 -N00("ARM CoreSight SW-DP") -D00(2BA01477) -L00(0) -TO18 -TC10000000 -TP21 -TDS8007 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -FO7 -FD20000000 -FC800 -FN1 -FF0STM32F4xx_2048.FLM -FS08000000 -FL0200000 -FP0($$Device:STM32F429IITx$CMSIS\Flash\STM32F4xx_2048.FLM)</Name>
         </SetRegEntry>
       </TargetDriverDllRegistry>
       <Breakpoint/>
-      <WatchWindow1>
-        <Ww>
-          <count>0</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>rssi,0x10</ItemText>
-        </Ww>
-        <Ww>
-          <count>1</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>RadioStatus</ItemText>
-        </Ww>
-        <Ww>
-          <count>2</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>RadioError</ItemText>
-        </Ww>
-        <Ww>
-          <count>3</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>random_num</ItemText>
-        </Ww>
-        <Ww>
-          <count>4</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>debug_uart_dma_buff</ItemText>
-        </Ww>
-        <Ww>
-          <count>5</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>glth_ret,0x0A</ItemText>
-        </Ww>
-        <Ww>
-          <count>6</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>fuck</ItemText>
-        </Ww>
-        <Ww>
-          <count>7</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>ip_port</ItemText>
-        </Ww>
-        <Ww>
-          <count>8</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>gprs_receive_dma_buff</ItemText>
-        </Ww>
-        <Ww>
-          <count>9</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>RadioPktStatus,0x0A</ItemText>
-        </Ww>
-      </WatchWindow1>
-      <WatchWindow2>
-        <Ww>
-          <count>0</count>
-          <WinNumber>2</WinNumber>
-          <ItemText>get_str_data</ItemText>
-        </Ww>
-        <Ww>
-          <count>1</count>
-          <WinNumber>2</WinNumber>
-          <ItemText>ip_port</ItemText>
-        </Ww>
-        <Ww>
-          <count>2</count>
-          <WinNumber>2</WinNumber>
-          <ItemText>gprs_receive_dma_buff</ItemText>
-        </Ww>
-        <Ww>
-          <count>3</count>
-          <WinNumber>2</WinNumber>
-          <ItemText>at_cmd_conn</ItemText>
-        </Ww>
-        <Ww>
-          <count>4</count>
-          <WinNumber>2</WinNumber>
-          <ItemText>\\etc_project\../User/4G/4G_app.c\gprs_stat</ItemText>
-        </Ww>
-        <Ww>
-          <count>5</count>
-          <WinNumber>2</WinNumber>
-          <ItemText>rssi</ItemText>
-        </Ww>
-        <Ww>
-          <count>6</count>
-          <WinNumber>2</WinNumber>
-          <ItemText>RadioStatus</ItemText>
-        </Ww>
-        <Ww>
-          <count>7</count>
-          <WinNumber>2</WinNumber>
-          <ItemText>hspi4</ItemText>
-        </Ww>
-        <Ww>
-          <count>8</count>
-          <WinNumber>2</WinNumber>
-          <ItemText>hspi5</ItemText>
-        </Ww>
-        <Ww>
-          <count>9</count>
-          <WinNumber>2</WinNumber>
-          <ItemText>p_sx126x</ItemText>
-        </Ww>
-        <Ww>
-          <count>10</count>
-          <WinNumber>2</WinNumber>
-          <ItemText>sx126x_1</ItemText>
-        </Ww>
-        <Ww>
-          <count>11</count>
-          <WinNumber>2</WinNumber>
-          <ItemText>RadioRxPayload</ItemText>
-        </Ww>
-        <Ww>
-          <count>12</count>
-          <WinNumber>2</WinNumber>
-          <ItemText>rf_status_manage,0x0A</ItemText>
-        </Ww>
-      </WatchWindow2>
-      <MemoryWindow1>
-        <Mm>
-          <WinNumber>1</WinNumber>
-          <SubType>8</SubType>
-          <ItemText>0x20020B94</ItemText>
-          <AccSizeX>0</AccSizeX>
-        </Mm>
-      </MemoryWindow1>
-      <MemoryWindow2>
-        <Mm>
-          <WinNumber>2</WinNumber>
-          <SubType>8</SubType>
-          <ItemText>0x20007364</ItemText>
-          <AccSizeX>0</AccSizeX>
-        </Mm>
-      </MemoryWindow2>
-      <MemoryWindow3>
-        <Mm>
-          <WinNumber>3</WinNumber>
-          <SubType>0</SubType>
-          <ItemText>0x0800f000</ItemText>
-          <AccSizeX>0</AccSizeX>
-        </Mm>
-      </MemoryWindow3>
-      <MemoryWindow4>
-        <Mm>
-          <WinNumber>4</WinNumber>
-          <SubType>0</SubType>
-          <ItemText>0x08010000</ItemText>
-          <AccSizeX>0</AccSizeX>
-        </Mm>
-      </MemoryWindow4>
       <Tracepoint>
         <THDelay>0</THDelay>
       </Tracepoint>
@@ -311,7 +140,7 @@
         <aSer1>0</aSer1>
         <aSer2>0</aSer2>
         <aPa>0</aPa>
-        <viewmode>1</viewmode>
+        <viewmode>0</viewmode>
         <vrSel>0</vrSel>
         <aSym>0</aSym>
         <aTbox>0</aTbox>
@@ -324,7 +153,7 @@
         <aPa1>0</aPa1>
         <AscS4>0</AscS4>
         <aSer4>0</aSer4>
-        <StkLoc>1</StkLoc>
+        <StkLoc>0</StkLoc>
         <TrcWin>0</TrcWin>
         <newCpu>0</newCpu>
         <uProt>0</uProt>
@@ -342,12 +171,6 @@
       <pszMrulep></pszMrulep>
       <pSingCmdsp></pSingCmdsp>
       <pMultCmdsp></pMultCmdsp>
-      <SystemViewers>
-        <Entry>
-          <Name>System Viewer\TIM2</Name>
-          <WinId>35905</WinId>
-        </Entry>
-      </SystemViewers>
       <DebugDescription>
         <Enable>1</Enable>
         <EnableFlashSeq>1</EnableFlashSeq>
@@ -360,7 +183,7 @@
 
   <Group>
     <GroupName>Application/MDK-ARM</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -379,7 +202,7 @@
   </Group>
 
   <Group>
-    <GroupName>Application/User/Core</GroupName>
+    <GroupName>4G</GroupName>
     <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
@@ -391,254 +214,14 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>../Core/Src/main.c</PathWithFileName>
-      <FilenameWithoutPath>main.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>2</GroupNumber>
-      <FileNumber>3</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>../Core/Src/gpio.c</PathWithFileName>
-      <FilenameWithoutPath>gpio.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>2</GroupNumber>
-      <FileNumber>4</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>../Core/Src/crc.c</PathWithFileName>
-      <FilenameWithoutPath>crc.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>2</GroupNumber>
-      <FileNumber>5</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>../Core/Src/dma.c</PathWithFileName>
-      <FilenameWithoutPath>dma.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>2</GroupNumber>
-      <FileNumber>6</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>../Core/Src/freertos.c</PathWithFileName>
-      <FilenameWithoutPath>freertos.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>2</GroupNumber>
-      <FileNumber>7</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>../Core/Src/i2c.c</PathWithFileName>
-      <FilenameWithoutPath>i2c.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>2</GroupNumber>
-      <FileNumber>8</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>../Core/Src/rtc.c</PathWithFileName>
-      <FilenameWithoutPath>rtc.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>2</GroupNumber>
-      <FileNumber>9</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>../Core/Src/spi.c</PathWithFileName>
-      <FilenameWithoutPath>spi.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>2</GroupNumber>
-      <FileNumber>10</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>../Core/Src/tim.c</PathWithFileName>
-      <FilenameWithoutPath>tim.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>2</GroupNumber>
-      <FileNumber>11</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>../Core/Src/usart.c</PathWithFileName>
-      <FilenameWithoutPath>usart.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>2</GroupNumber>
-      <FileNumber>12</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>../Core/Src/stm32f4xx_it.c</PathWithFileName>
-      <FilenameWithoutPath>stm32f4xx_it.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>2</GroupNumber>
-      <FileNumber>13</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>../Core/Src/stm32f4xx_hal_msp.c</PathWithFileName>
-      <FilenameWithoutPath>stm32f4xx_hal_msp.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>2</GroupNumber>
-      <FileNumber>14</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>../Core/Src/stm32f4xx_hal_timebase_tim.c</PathWithFileName>
-      <FilenameWithoutPath>stm32f4xx_hal_timebase_tim.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-  </Group>
-
-  <Group>
-    <GroupName>Drivers/CMSIS</GroupName>
-    <tvExp>0</tvExp>
-    <tvExpOptDlg>0</tvExpOptDlg>
-    <cbSel>0</cbSel>
-    <RteFlg>0</RteFlg>
-    <File>
-      <GroupNumber>3</GroupNumber>
-      <FileNumber>15</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>../Core/Src/system_stm32f4xx.c</PathWithFileName>
-      <FilenameWithoutPath>system_stm32f4xx.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-  </Group>
-
-  <Group>
-    <GroupName>User/Rf</GroupName>
-    <tvExp>1</tvExp>
-    <tvExpOptDlg>0</tvExpOptDlg>
-    <cbSel>0</cbSel>
-    <RteFlg>0</RteFlg>
-    <File>
-      <GroupNumber>4</GroupNumber>
-      <FileNumber>16</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\User\RF\sx126x\radio.c</PathWithFileName>
-      <FilenameWithoutPath>radio.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>4</GroupNumber>
-      <FileNumber>17</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\User\RF\sx126x\sx126x.c</PathWithFileName>
-      <FilenameWithoutPath>sx126x.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>4</GroupNumber>
-      <FileNumber>18</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\User\RF\sx126x\sx126x_hal.c</PathWithFileName>
-      <FilenameWithoutPath>sx126x_hal.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>4</GroupNumber>
-      <FileNumber>19</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\User\RF\rf.c</PathWithFileName>
-      <FilenameWithoutPath>rf.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-  </Group>
-
-  <Group>
-    <GroupName>User/4G</GroupName>
-    <tvExp>1</tvExp>
-    <tvExpOptDlg>0</tvExpOptDlg>
-    <cbSel>0</cbSel>
-    <RteFlg>0</RteFlg>
-    <File>
-      <GroupNumber>5</GroupNumber>
-      <FileNumber>20</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
       <PathWithFileName>..\User\4G\4G_app.c</PathWithFileName>
       <FilenameWithoutPath>4G_app.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>5</GroupNumber>
-      <FileNumber>21</FileNumber>
+      <GroupNumber>2</GroupNumber>
+      <FileNumber>3</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -651,14 +234,14 @@
   </Group>
 
   <Group>
-    <GroupName>User/debug</GroupName>
+    <GroupName>Debug</GroupName>
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
     <File>
-      <GroupNumber>6</GroupNumber>
-      <FileNumber>22</FileNumber>
+      <GroupNumber>3</GroupNumber>
+      <FileNumber>4</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -671,271 +254,491 @@
   </Group>
 
   <Group>
+    <GroupName>RF</GroupName>
+    <tvExp>1</tvExp>
+    <tvExpOptDlg>0</tvExpOptDlg>
+    <cbSel>0</cbSel>
+    <RteFlg>0</RteFlg>
+    <File>
+      <GroupNumber>4</GroupNumber>
+      <FileNumber>5</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\User\RF\sx126x\radio.c</PathWithFileName>
+      <FilenameWithoutPath>radio.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>4</GroupNumber>
+      <FileNumber>6</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\User\RF\sx126x\sx126x.c</PathWithFileName>
+      <FilenameWithoutPath>sx126x.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>4</GroupNumber>
+      <FileNumber>7</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\User\RF\sx126x\sx126x_hal.c</PathWithFileName>
+      <FilenameWithoutPath>sx126x_hal.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>4</GroupNumber>
+      <FileNumber>8</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\User\RF\rf.c</PathWithFileName>
+      <FilenameWithoutPath>rf.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+  </Group>
+
+  <Group>
+    <GroupName>Application/User/Core</GroupName>
+    <tvExp>0</tvExp>
+    <tvExpOptDlg>0</tvExpOptDlg>
+    <cbSel>0</cbSel>
+    <RteFlg>0</RteFlg>
+    <File>
+      <GroupNumber>5</GroupNumber>
+      <FileNumber>9</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>../Core/Src/main.c</PathWithFileName>
+      <FilenameWithoutPath>main.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>5</GroupNumber>
+      <FileNumber>10</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>../Core/Src/gpio.c</PathWithFileName>
+      <FilenameWithoutPath>gpio.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>5</GroupNumber>
+      <FileNumber>11</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>../Core/Src/crc.c</PathWithFileName>
+      <FilenameWithoutPath>crc.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>5</GroupNumber>
+      <FileNumber>12</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>../Core/Src/dma.c</PathWithFileName>
+      <FilenameWithoutPath>dma.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>5</GroupNumber>
+      <FileNumber>13</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>../Core/Src/freertos.c</PathWithFileName>
+      <FilenameWithoutPath>freertos.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>5</GroupNumber>
+      <FileNumber>14</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>../Core/Src/i2c.c</PathWithFileName>
+      <FilenameWithoutPath>i2c.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>5</GroupNumber>
+      <FileNumber>15</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>../Core/Src/rtc.c</PathWithFileName>
+      <FilenameWithoutPath>rtc.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>5</GroupNumber>
+      <FileNumber>16</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>../Core/Src/spi.c</PathWithFileName>
+      <FilenameWithoutPath>spi.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>5</GroupNumber>
+      <FileNumber>17</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>../Core/Src/tim.c</PathWithFileName>
+      <FilenameWithoutPath>tim.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>5</GroupNumber>
+      <FileNumber>18</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>../Core/Src/usart.c</PathWithFileName>
+      <FilenameWithoutPath>usart.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>5</GroupNumber>
+      <FileNumber>19</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>../Core/Src/stm32f4xx_it.c</PathWithFileName>
+      <FilenameWithoutPath>stm32f4xx_it.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>5</GroupNumber>
+      <FileNumber>20</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>../Core/Src/stm32f4xx_hal_msp.c</PathWithFileName>
+      <FilenameWithoutPath>stm32f4xx_hal_msp.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>5</GroupNumber>
+      <FileNumber>21</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>../Core/Src/stm32f4xx_hal_timebase_tim.c</PathWithFileName>
+      <FilenameWithoutPath>stm32f4xx_hal_timebase_tim.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+  </Group>
+
+  <Group>
     <GroupName>Drivers/STM32F4xx_HAL_Driver</GroupName>
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
     <File>
-      <GroupNumber>7</GroupNumber>
-      <FileNumber>23</FileNumber>
+      <GroupNumber>6</GroupNumber>
+      <FileNumber>22</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>C:/Users/Administrator/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_crc.c</PathWithFileName>
+      <PathWithFileName>C:/Users/Administrator.SC-201906042026/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_crc.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_hal_crc.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>7</GroupNumber>
-      <FileNumber>24</FileNumber>
+      <GroupNumber>6</GroupNumber>
+      <FileNumber>23</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>C:/Users/Administrator/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c</PathWithFileName>
+      <PathWithFileName>C:/Users/Administrator.SC-201906042026/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_hal_rcc.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>7</GroupNumber>
-      <FileNumber>25</FileNumber>
+      <GroupNumber>6</GroupNumber>
+      <FileNumber>24</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>C:/Users/Administrator/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.c</PathWithFileName>
+      <PathWithFileName>C:/Users/Administrator.SC-201906042026/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_hal_rcc_ex.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>7</GroupNumber>
-      <FileNumber>26</FileNumber>
+      <GroupNumber>6</GroupNumber>
+      <FileNumber>25</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>C:/Users/Administrator/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.c</PathWithFileName>
+      <PathWithFileName>C:/Users/Administrator.SC-201906042026/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_hal_flash.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>7</GroupNumber>
-      <FileNumber>27</FileNumber>
+      <GroupNumber>6</GroupNumber>
+      <FileNumber>26</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>C:/Users/Administrator/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.c</PathWithFileName>
+      <PathWithFileName>C:/Users/Administrator.SC-201906042026/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_hal_flash_ex.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>7</GroupNumber>
-      <FileNumber>28</FileNumber>
+      <GroupNumber>6</GroupNumber>
+      <FileNumber>27</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>C:/Users/Administrator/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ramfunc.c</PathWithFileName>
+      <PathWithFileName>C:/Users/Administrator.SC-201906042026/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ramfunc.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_hal_flash_ramfunc.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>7</GroupNumber>
-      <FileNumber>29</FileNumber>
+      <GroupNumber>6</GroupNumber>
+      <FileNumber>28</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>C:/Users/Administrator/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c</PathWithFileName>
+      <PathWithFileName>C:/Users/Administrator.SC-201906042026/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_hal_gpio.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>7</GroupNumber>
-      <FileNumber>30</FileNumber>
+      <GroupNumber>6</GroupNumber>
+      <FileNumber>29</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>C:/Users/Administrator/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c</PathWithFileName>
+      <PathWithFileName>C:/Users/Administrator.SC-201906042026/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_hal_dma_ex.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>7</GroupNumber>
-      <FileNumber>31</FileNumber>
+      <GroupNumber>6</GroupNumber>
+      <FileNumber>30</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>C:/Users/Administrator/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c</PathWithFileName>
+      <PathWithFileName>C:/Users/Administrator.SC-201906042026/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_hal_dma.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>7</GroupNumber>
-      <FileNumber>32</FileNumber>
+      <GroupNumber>6</GroupNumber>
+      <FileNumber>31</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>C:/Users/Administrator/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.c</PathWithFileName>
+      <PathWithFileName>C:/Users/Administrator.SC-201906042026/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_hal_pwr.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>7</GroupNumber>
-      <FileNumber>33</FileNumber>
+      <GroupNumber>6</GroupNumber>
+      <FileNumber>32</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>C:/Users/Administrator/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.c</PathWithFileName>
+      <PathWithFileName>C:/Users/Administrator.SC-201906042026/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_hal_pwr_ex.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>7</GroupNumber>
-      <FileNumber>34</FileNumber>
+      <GroupNumber>6</GroupNumber>
+      <FileNumber>33</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>C:/Users/Administrator/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c</PathWithFileName>
+      <PathWithFileName>C:/Users/Administrator.SC-201906042026/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_hal_cortex.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>7</GroupNumber>
-      <FileNumber>35</FileNumber>
+      <GroupNumber>6</GroupNumber>
+      <FileNumber>34</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>C:/Users/Administrator/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c</PathWithFileName>
+      <PathWithFileName>C:/Users/Administrator.SC-201906042026/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_hal.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>7</GroupNumber>
-      <FileNumber>36</FileNumber>
+      <GroupNumber>6</GroupNumber>
+      <FileNumber>35</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>C:/Users/Administrator/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_exti.c</PathWithFileName>
+      <PathWithFileName>C:/Users/Administrator.SC-201906042026/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_exti.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_hal_exti.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>7</GroupNumber>
-      <FileNumber>37</FileNumber>
+      <GroupNumber>6</GroupNumber>
+      <FileNumber>36</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>C:/Users/Administrator/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c.c</PathWithFileName>
+      <PathWithFileName>C:/Users/Administrator.SC-201906042026/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_hal_i2c.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>7</GroupNumber>
-      <FileNumber>38</FileNumber>
+      <GroupNumber>6</GroupNumber>
+      <FileNumber>37</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>C:/Users/Administrator/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c_ex.c</PathWithFileName>
+      <PathWithFileName>C:/Users/Administrator.SC-201906042026/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c_ex.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_hal_i2c_ex.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>7</GroupNumber>
-      <FileNumber>39</FileNumber>
+      <GroupNumber>6</GroupNumber>
+      <FileNumber>38</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>C:/Users/Administrator/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc.c</PathWithFileName>
+      <PathWithFileName>C:/Users/Administrator.SC-201906042026/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_hal_rtc.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>7</GroupNumber>
-      <FileNumber>40</FileNumber>
+      <GroupNumber>6</GroupNumber>
+      <FileNumber>39</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>C:/Users/Administrator/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc_ex.c</PathWithFileName>
+      <PathWithFileName>C:/Users/Administrator.SC-201906042026/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc_ex.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_hal_rtc_ex.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>7</GroupNumber>
-      <FileNumber>41</FileNumber>
+      <GroupNumber>6</GroupNumber>
+      <FileNumber>40</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>C:/Users/Administrator/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.c</PathWithFileName>
+      <PathWithFileName>C:/Users/Administrator.SC-201906042026/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_hal_spi.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>7</GroupNumber>
-      <FileNumber>42</FileNumber>
+      <GroupNumber>6</GroupNumber>
+      <FileNumber>41</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>C:/Users/Administrator/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c</PathWithFileName>
+      <PathWithFileName>C:/Users/Administrator.SC-201906042026/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_hal_tim.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>7</GroupNumber>
-      <FileNumber>43</FileNumber>
+      <GroupNumber>6</GroupNumber>
+      <FileNumber>42</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>C:/Users/Administrator/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c</PathWithFileName>
+      <PathWithFileName>C:/Users/Administrator.SC-201906042026/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_hal_tim_ex.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>7</GroupNumber>
-      <FileNumber>44</FileNumber>
+      <GroupNumber>6</GroupNumber>
+      <FileNumber>43</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>C:/Users/Administrator/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c</PathWithFileName>
+      <PathWithFileName>C:/Users/Administrator.SC-201906042026/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_hal_uart.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -943,8 +746,28 @@
   </Group>
 
   <Group>
+    <GroupName>Drivers/CMSIS</GroupName>
+    <tvExp>0</tvExp>
+    <tvExpOptDlg>0</tvExpOptDlg>
+    <cbSel>0</cbSel>
+    <RteFlg>0</RteFlg>
+    <File>
+      <GroupNumber>7</GroupNumber>
+      <FileNumber>44</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>../Core/Src/system_stm32f4xx.c</PathWithFileName>
+      <FilenameWithoutPath>system_stm32f4xx.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+  </Group>
+
+  <Group>
     <GroupName>Middlewares/FreeRTOS</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -955,7 +778,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>C:/Users/Administrator/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Middlewares/Third_Party/FreeRTOS/Source/croutine.c</PathWithFileName>
+      <PathWithFileName>C:/Users/Administrator.SC-201906042026/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Middlewares/Third_Party/FreeRTOS/Source/croutine.c</PathWithFileName>
       <FilenameWithoutPath>croutine.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -967,7 +790,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>C:/Users/Administrator/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Middlewares/Third_Party/FreeRTOS/Source/event_groups.c</PathWithFileName>
+      <PathWithFileName>C:/Users/Administrator.SC-201906042026/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Middlewares/Third_Party/FreeRTOS/Source/event_groups.c</PathWithFileName>
       <FilenameWithoutPath>event_groups.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -979,7 +802,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>C:/Users/Administrator/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Middlewares/Third_Party/FreeRTOS/Source/list.c</PathWithFileName>
+      <PathWithFileName>C:/Users/Administrator.SC-201906042026/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Middlewares/Third_Party/FreeRTOS/Source/list.c</PathWithFileName>
       <FilenameWithoutPath>list.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -991,7 +814,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>C:/Users/Administrator/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Middlewares/Third_Party/FreeRTOS/Source/queue.c</PathWithFileName>
+      <PathWithFileName>C:/Users/Administrator.SC-201906042026/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Middlewares/Third_Party/FreeRTOS/Source/queue.c</PathWithFileName>
       <FilenameWithoutPath>queue.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -1003,7 +826,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>C:/Users/Administrator/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c</PathWithFileName>
+      <PathWithFileName>C:/Users/Administrator.SC-201906042026/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c</PathWithFileName>
       <FilenameWithoutPath>stream_buffer.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -1015,7 +838,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>C:/Users/Administrator/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Middlewares/Third_Party/FreeRTOS/Source/tasks.c</PathWithFileName>
+      <PathWithFileName>C:/Users/Administrator.SC-201906042026/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Middlewares/Third_Party/FreeRTOS/Source/tasks.c</PathWithFileName>
       <FilenameWithoutPath>tasks.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -1027,7 +850,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>C:/Users/Administrator/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Middlewares/Third_Party/FreeRTOS/Source/timers.c</PathWithFileName>
+      <PathWithFileName>C:/Users/Administrator.SC-201906042026/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Middlewares/Third_Party/FreeRTOS/Source/timers.c</PathWithFileName>
       <FilenameWithoutPath>timers.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -1039,7 +862,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>C:/Users/Administrator/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.c</PathWithFileName>
+      <PathWithFileName>C:/Users/Administrator.SC-201906042026/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.c</PathWithFileName>
       <FilenameWithoutPath>cmsis_os2.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -1051,7 +874,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>C:/Users/Administrator/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_4.c</PathWithFileName>
+      <PathWithFileName>C:/Users/Administrator.SC-201906042026/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_4.c</PathWithFileName>
       <FilenameWithoutPath>heap_4.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -1063,7 +886,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>C:/Users/Administrator/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/port.c</PathWithFileName>
+      <PathWithFileName>C:/Users/Administrator.SC-201906042026/STM32Cube/Repository/STM32Cube_FW_F4_V1.25.0/Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/port.c</PathWithFileName>
       <FilenameWithoutPath>port.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>

@@ -823,7 +823,7 @@ void task_t4G_data_send(void *argument)
 					gprs_stat.con_client[i].send_len = 0;
 					break;
 				}
-				if(gprs_stat.con_client[i].connect_ok != G4_CONNECT_OK) //未连接ok  不处理 等待连接ok得时候处理
+				if(gprs_stat.con_client[i].connect_ok != G4_CONNECT_OK) //未连接ok  不处理 等待连接ok得时侯启动发送
 				{
 					break;
 				}					

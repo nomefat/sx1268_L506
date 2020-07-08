@@ -10,7 +10,7 @@
 #include "rf.h"
 
 
-#define JUMP_CH_COUNT    					30
+#define JUMP_CH_COUNT    					(30*4)
 #define DEV_ID         						20201001
 #define FRAME_SLOT_COUNT        			64   				//64个slot表示一帧
 #define RF_NO_RX_REBOOT_TICKS   			(100*120)			//120秒
@@ -101,6 +101,17 @@ int32_t rf_set_ch(uint8_t rf_index,uint32_t freq);
 
 void rf_rev_packet_insert_list(uint8_t rf_index,void *pdata,uint8_t size, int16_t rssi, int8_t snr);
 
+void rf_event_first_handle(uint8_t index);
+
+//按照分车阈值来处理未处理的事件
+void fcyz_delay_handle(uint8_t index);
+
+
+int32_t calc_tow_event_time(SNP_EVENT_t e1,uint32_t rev_slot_count_1,SNP_EVENT_t e2,uint32_t rev_slot_count_2);
+
+void poll_event_need_handle(void);
+
+void event_stat_handle(uint8_t index,uint8_t now_sensor_onoff);
 
 
 
@@ -243,7 +254,7 @@ void rf_init(uint8_t rf_index)
 
 uint32_t get_now_jump_ch()
 {
-	now_ch = ch_freq_list[ch_group[rf_syn.jump_ch_group][rf_syn.head.packet_seq]];
+	now_ch = ch_freq_list[ch_group[rf_syn.jump_ch_group][rf_syn.head.packet_seq%30]];
 	return now_ch;
 }
 
@@ -325,7 +336,7 @@ void OnTxDone( void )
 	HAL_GPIO_WritePin(RF1_LED_1_GPIO_Port,RF1_LED_1_Pin,GPIO_PIN_SET);
 	rf_status_manage[RF1].rf_send_ok_count++;
 	rf_set_ch(RF1,get_now_jump_ch());
-  Radio.RxBoosted( 0);
+	Radio.RxBoosted( 0);
 	RadioStatus = SX126xGetStatus();
 	rf_status_manage[RF1].rf_work_status = RadioStatus.Fields.ChipMode;	
 }
@@ -444,7 +455,6 @@ void monitor_rf_status()
 void task_rf_callback(void *argument)
 {
 	uint32_t notify_value;
-	static uint32_t times = 0;
 	
 	extern TIM_HandleTypeDef htim2;
 	HAL_TIM_Base_Start_IT(&htim2);
@@ -558,6 +568,7 @@ void timer_sec(uint32_t t)
 	}
 }
 
+//每个时间槽1/256 秒
 void rf_timer(void)
 {
 	
@@ -579,7 +590,8 @@ void rf_timer(void)
 			break;	
 		case 4:     //1 2 升级包
 			rf_send_updata(RF2);
-			break;				
+			break;	
+	
 		case 60:   //ack包
 			rf_send_ack(RF1);
 			break;		
@@ -587,6 +599,7 @@ void rf_timer(void)
 			rf_send_ack(RF2);
 			break;				
 	}
+	poll_event_need_handle();		
 	
 }
 
@@ -615,14 +628,13 @@ void rf_rev_packet_insert_list(uint8_t rf_index,void *pdata,uint8_t size, int16_
 	struct_rf_stat *p_rf_stat = (struct_rf_stat *)pdata;		
 
 	struct_rf_event *p_rf_event_list ;
-	struct_rf_stat *p_rf_stat_list ;	
 
 	if(size <3)
 		return;
 
 	crc = crc16(0,pdata,size-2);
 
-	if(crc != (pdata[size-2]+(pdata[size-1]<<8)))
+	if(crc != (((uint8_t *)pdata)[size-2]+(((uint8_t *)pdata)[size-1]<<8)))
 		return;
 
 	if(p_rf_syn->head.packet_type == RF1_AP_SYN || p_rf_syn->head.packet_type == RF2_AP_SYN)
@@ -643,7 +655,7 @@ void rf_rev_packet_insert_list(uint8_t rf_index,void *pdata,uint8_t size, int16_
 	}
 	else if(p_rf_event->head.packet_type == RF_S_EVENT)//事件包
 	{
-		index = find_sensor_index((p_rf_event->head.sensor_id); //找到索引
+		index = find_sensor_index(p_rf_event->head.dev_id); //找到索引
 		if(index != -1)
 		{
 			if(sensor_list[index].sensor_data.sensor_event[0].size == 0) //第一包
@@ -656,21 +668,21 @@ void rf_rev_packet_insert_list(uint8_t rf_index,void *pdata,uint8_t size, int16_
 			}
 			else //非第一条数据
 			{
-				p_rf_event_list = (struct_rf_event *)&sensor_list[index].sensor_data.sensor_event[1].event_packet;
+				p_rf_event_list = (struct_rf_event *)&sensor_list[index].sensor_data.sensor_event[1].event_packet; 
 				if(p_rf_event_list->head.packet_seq != p_rf_event->head.packet_seq)//新数据,严格按照包序号区分重复数据
 				{
-					sensor_list[index].sensor_data.sensor_event[1].size = size;
+					sensor_list[index].sensor_data.sensor_event[1].size = size;           //新数据来了直接扔进sensor_event[1]  ， 所以必须保证这里不能有没有处理过的数据
 					sensor_list[index].sensor_data.sensor_event[1].rev_slot_count = rf_slot_count;																																																																																									
 					memcpy(sensor_list[index].sensor_data.sensor_event[1].event_packet,pdata,size); //新数据 需要触发数据处理
 					new_packet_insert_flag = 1;	
-					if(p_rf_event->resend_count < sensor_list[index].sensor_stat.resend_times) //当前包的重传次数小于记录的重传次数 说明已经传输成功，把上次的重传次数记下来
+					if(p_rf_event->resend_count < sensor_list[index].sensor_stat.last_resend_times) //当前包的重传次数小于记录的重传次数 说明已经传输成功，把上次的重传次数记下来
 					{
-						sensor_list[index].sensor_stat.resend_count[0] += sensor_list[index].sensor_stat.resend_times;
-						if(sensor_list[index].sensor_stat.resend_times>=31)
+						sensor_list[index].sensor_stat.resend_count[0] += sensor_list[index].sensor_stat.last_resend_times;
+						if(sensor_list[index].sensor_stat.last_resend_times>=31)
 							sensor_list[index].sensor_stat.resend_count[31]++;
 						else
 						{
-							sensor_list[index].sensor_stat.resend_count[sensor_list[index].sensor_stat.resend_times]++;
+							sensor_list[index].sensor_stat.resend_count[sensor_list[index].sensor_stat.last_resend_times]++;
 						}
 						
 					}
@@ -687,14 +699,14 @@ void rf_rev_packet_insert_list(uint8_t rf_index,void *pdata,uint8_t size, int16_
 					}
 					
 				}
-				sensor_list[index].sensor_stat.resend_times = p_rf_event->resend_count;
+				sensor_list[index].sensor_stat.last_resend_times = p_rf_event->resend_count;
 				sensor_list[index].sensor_stat.rssi[rf_index] = rssi;
 				sensor_list[index].sensor_stat.snr[rf_index] = snr;
 				sensor_list[index].sensor_stat.rssi_add[rf_index] += rssi;
 				sensor_list[index].sensor_stat.snr_add[rf_index] += snr;
 				sensor_list[index].sensor_stat.rssi_count[rf_index]++;	
 				sensor_list[index].sensor_stat.rssi_avg[rf_index] = sensor_list[index].sensor_stat.rssi_add[rf_index]/sensor_list[index].sensor_stat.rssi_count[rf_index];	
-				sensor_list[index].sensor_stat.snr_avg[rf_index] = sensor_list[index].sensor_stat.snr_add[rf_index]/sensor_list[index].sensor_stat.snr_count[rf_index];	
+				sensor_list[index].sensor_stat.snr_avg[rf_index] = sensor_list[index].sensor_stat.snr_add[rf_index]/sensor_list[index].sensor_stat.rssi_count[rf_index];	
 								
 			}
 			if(new_packet_insert_flag == 1)//插入了新数据
@@ -725,15 +737,16 @@ void rf_event_first_handle(uint8_t index)
 {
 	struct_rf_event *p_event_packet_1;
 	struct_rf_event *p_event_packet_2;
-	uint8_t i;
+	int8_t i;
 	int8_t seq_cha;
-	uint8_t event_num,lost_event_count;
-	uint8_t size_1,size_2;
+	int8_t event_num;
+	uint8_t lost_event_count;
+	uint8_t size_2;
 	uint32_t event_time;
 
 	p_event_packet_1 = (struct_rf_event *)(sensor_list[index].sensor_data.sensor_event[0].event_packet);
 	p_event_packet_2 = (struct_rf_event *)(sensor_list[index].sensor_data.sensor_event[1].event_packet);
-	size_1 = sensor_list[index].sensor_data.sensor_event[0].size;
+
 	size_2 = sensor_list[index].sensor_data.sensor_event[1].size;
 
 	//取出有效事件，严格按照前后包的包序号判断，包序号差一表示有一个有效事件
@@ -751,18 +764,19 @@ void rf_event_first_handle(uint8_t index)
 	
 	sensor_list[index].sensor_stat.event_count += event_num; //统计实际收到的事件数量
 
-	for(i=event_num;i>=0;i--)  //事件约定最新的在数组前面，所以从后面开始取数据
+	for(i=event_num-1;i>=0;i--)  //事件约定最新的在数组前面，所以从后面开始取数据
 	{
-		if(sensor_list[index].event_calc.now_sensor_onoff == 0) //没有ON OFF 状态  收到的第一包数据
+		if(sensor_list[index].event_calc.now_sensor_onoff == 0 && sensor_list[index].event_calc.now_event_need_handle == 0) //没有ON OFF 状态  收到的第一包数据
 		{
-
-			sensor_list[index].event_calc.event[0] = p_event_packet_2->event[i];
-			sensor_list[index].event_calc.rev_slot_count[0] = sensor_list[index].sensor_data.sensor_event[1].rev_slot_count;
+			sensor_list[index].event_calc.event[0] = p_event_packet_2->event[i];  //把确定on off的事件放在计算用的事件里
+			sensor_list[index].event_calc.rev_slot_count[0] = sensor_list[index].sensor_data.sensor_event[1].rev_slot_count; //收到事件包的时间
 			if(p_event_packet_2->event[0].blIsOn == E_ON)
 				sensor_list[index].event_calc.now_sensor_onoff = S_ON;
 			else
 				sensor_list[index].event_calc.now_sensor_onoff = S_OFF;	
+			sensor_list[index].event_calc.onoff_time_ms = 100;	
 			sensor_list[index].event_calc.now_event_need_handle = 0;  //event 已经处理完成
+			event_stat_handle(index);
 		}
 		else
 		{
@@ -772,111 +786,248 @@ void rf_event_first_handle(uint8_t index)
 				{
 					if(p_event_packet_2->event[i].blIsOn == E_ON)  //OFF->ON
 					{
-						sensor_list[index].event_calc.event[0] = p_event_packet_2->event[i];
-						sensor_list[index].event_calc.rev_slot_count[0] = sensor_list[index].sensor_data.sensor_event[1].rev_slot_count;						
-						sensor_list[index].event_calc.now_sensor_onoff = S_ON;
+						sensor_list[index].event_calc.event[1] = p_event_packet_2->event[i]; 					//event[1] 存放待处理的事件
+						sensor_list[index].event_calc.rev_slot_count[1] = sensor_list[index].sensor_data.sensor_event[1].rev_slot_count;
+
+						event_time = calc_two_event_time(sensor_list[index].event_calc.event[1],sensor_list[index].event_calc.rev_slot_count[1],
+						p_event_packet_2->event[i],sensor_list[index].sensor_data.sensor_event[1].rev_slot_count);
+						sensor_list[index].event_calc.onoff_time_ms = event_time;
+
+						sensor_list[index].event_calc.now_event_need_handle = 1;  //event 没有处理完成	
+						fcyz_delay_handle(index);  //可能事件延迟送达，在这里可以进行立刻确认
+						
 					}
 					else //OFF->OFF   可能是丢了一个ON事件  或者是ON事件被分车阈值过滤掉了
 					{
 
 					}
-					sensor_list[index].event_calc.now_event_need_handle = 0;  //event 已经处理完成	
 
 				}
 				else  // ON 状态已经被确认
 				{
-					if(p_event_packet_2->event[i]blIsOn == E_ON) //可能是丢了一个OFF事件 或者 OFF事件被过滤掉了 ，按理说ON也会同时被过滤掉 所以不可能是这种情况
+					if(p_event_packet_2->event[i].blIsOn == E_ON) //可能是丢了一个OFF事件 或者 OFF事件被过滤掉了 ，按理说ON也会同时被过滤掉 所以不可能是这种情况
 					{
 						
 					}
 					else //ON->OFF   先把OFF事件放到未确定的事件里  等待分车阈值的确认
 					{						
-						sensor_list[index].event_calc.event[1] = p_event_packet_2->event[i];
+						sensor_list[index].event_calc.event[1] = p_event_packet_2->event[i]; //event[1] 存放待处理的事件
 						sensor_list[index].event_calc.rev_slot_count[1] = sensor_list[index].sensor_data.sensor_event[1].rev_slot_count;
+
+						event_time = calc_two_event_time(sensor_list[index].event_calc.event[1],sensor_list[index].event_calc.rev_slot_count[1],
+						p_event_packet_2->event[i],sensor_list[index].sensor_data.sensor_event[1].rev_slot_count);
+						sensor_list[index].event_calc.onoff_time_ms = event_time;
+
 						sensor_list[index].event_calc.now_event_need_handle = 1;  //event 没有处理完成	
-						fcyz_delay_handle(index);
+						fcyz_delay_handle(index);   //可能事件延迟送达，在这里可以进行立刻确认
+						 
 					}	
 				}
 				
 			}
-			else  //有待处理的事件
+			else  //有待处理的事件，提前结算事件
 			{
-				if(sensor_list[index].event_calc.event[1].blIsOn == E_OFF) //待处理的数据一般都是OFF  不会是ON
+				if(sensor_list[index].event_calc.event[1].blIsOn == E_OFF) //待处理的数据是OFF  
 				{
-					if(p_event_packet_2->event[i]blIsOn == E_ON) //新来的是ON事件
+					if(p_event_packet_2->event[i].blIsOn == E_ON) //新来的是ON事件
 					{
-						event_time = calc_tow_event_time(sensor_list[index].event_calc.event[1],sensor_list[index].event_calc.rev_slot_count[1],
+						//计算两个事件的实际时间，通过接收时间和事件中的时间戳来综合计算
+						event_time = calc_two_event_time(sensor_list[index].event_calc.event[1],sensor_list[index].event_calc.rev_slot_count[1],
 						p_event_packet_2->event[i],sensor_list[index].sensor_data.sensor_event[1].rev_slot_count);
 						
-						if(event_time > 1) //大于分车阈值  OFF没有时间输出
+						if(event_time > sensor_list[index].sensor_cfg.off_to_on_min_time) //大于分车阈值 OFF有效 OFF没有时间输出  ON有效
 						{
 							sensor_list[index].event_calc.event[0] = sensor_list[index].event_calc.event[1];
 							sensor_list[index].event_calc.rev_slot_count[0] = sensor_list[index].event_calc.rev_slot_count[1];						
 							sensor_list[index].event_calc.now_sensor_onoff = S_OFF;
-							sensor_list[index].event_calc.now_event_need_handle = 0;  //event 已经处理完成	
+							sensor_list[index].event_calc.onoff_time_ms = event_time;
+							sensor_list[index].event_calc.now_event_need_handle = 0;  //event 已经处理完成
+							event_stat_handle(index);
+
 							//ON转化为待处理事件
-							sensor_list[index].event_calc.event[1] = p_event_packet_2->event[i];
-							sensor_list[index].event_calc.rev_slot_count[1]	= sensor_list[index].sensor_data.sensor_event[1].rev_slot_count;						
+							sensor_list[index].event_calc.event[1] = p_event_packet_2->event[i]; 					//event[1] 存放待处理的事件
+							sensor_list[index].event_calc.rev_slot_count[1] = sensor_list[index].sensor_data.sensor_event[1].rev_slot_count;
+
+							event_time = calc_two_event_time(sensor_list[index].event_calc.event[1],sensor_list[index].event_calc.rev_slot_count[1],
+							p_event_packet_2->event[i],sensor_list[index].sensor_data.sensor_event[1].rev_slot_count);
+							sensor_list[index].event_calc.onoff_time_ms = event_time;
+
+							sensor_list[index].event_calc.now_event_need_handle = 1;  //event 没有处理完成	
+							fcyz_delay_handle(index);  //可能事件延迟送达，在这里可以进行立刻确认
+												
 
 						}
 						else  //小于分车阈值   OFF  ON 全部丢弃
 						{
-							/* code */
+							sensor_list[index].event_calc.now_event_need_handle = 0;  //event 已经处理完成	相当于把当前event[1] 中未确认的OFF事件丢弃  当前的ON事件也不处理 丢弃了
 						}
 						
 					}
 					else  //新来的是OFF   OFF->OFF   ON丢失
 					{
-						/* code */
+						//只丢弃现有的事件  未确认的OFF事件不作处理
 					}
 					
 				}
+				else //未处理的是ON事件  
+				{
+					if(p_event_packet_2->event[i].blIsOn == E_OFF) //新来的是OFF事件 立即确认ON事件
+					{					
+						sensor_list[index].event_calc.event[0] = sensor_list[index].event_calc.event[1];
+						sensor_list[index].event_calc.rev_slot_count[0] = sensor_list[index].event_calc.rev_slot_count[1];						
+						sensor_list[index].event_calc.now_sensor_onoff = S_ON;
+
+						event_time = calc_two_event_time(sensor_list[index].event_calc.event[1],sensor_list[index].event_calc.rev_slot_count[1],
+						p_event_packet_2->event[i],sensor_list[index].sensor_data.sensor_event[1].rev_slot_count);
+						sensor_list[index].event_calc.onoff_time_ms = event_time;
+						event_stat_handle(index);
+						sensor_list[index].event_calc.now_event_need_handle = 0;  //event 已经处理完成	
+						
+						//OFF事件转换为待处理事件
+						sensor_list[index].event_calc.event[1] = p_event_packet_2->event[i]; 					//event[1] 存放待处理的事件
+						sensor_list[index].event_calc.rev_slot_count[1] = sensor_list[index].sensor_data.sensor_event[1].rev_slot_count;
+
+						event_time = calc_two_event_time(sensor_list[index].event_calc.event[1],sensor_list[index].event_calc.rev_slot_count[1],
+						p_event_packet_2->event[i],sensor_list[index].sensor_data.sensor_event[1].rev_slot_count);
+						sensor_list[index].event_calc.onoff_time_ms = event_time;
+
+						sensor_list[index].event_calc.now_event_need_handle = 1;  //event 没有处理完成	
+						fcyz_delay_handle(index);  //可能事件延迟送达，在这里可以进行立刻确认	
+					}
+					else //新来的是ON事件  表示中间丢了一个OFF
+					{
+						//只丢弃现有的事件  未确认的ON事件不作处理
+					}
+										
+				}
+				
 			}
 			
-		}
-		
-		if(event_num>1) //还有一个事件，需要判断是能立即处理 还是需要等待分车阈值延时后处理
-		{
-			//把包里的事件挪进处理事件中
-			sensor_list[index].event_calc.event[1] = p_event_packet_2->event[1];
-			sensor_list[index].event_calc.rev_slot_count[1] = sensor_list[index].sensor_data.sensor_event[1].rev_slot_count;
-			//根据事件1 处理事件2
-			if(handle_event_1(index) == 0)//处理完
-			{
-				sensor_list[index].event_calc.event[0] = psensor_list[index].event_calc.event[1];
-				sensor_list[index].event_calc.rev_slot_count[0] = sensor_list[index].event_calc.rev_slot_count[1] ;
-				sensor_list[index].event_calc.now_event_need_handle = 0; //表示没有事件需要下次处理
-			}
-			else
-			{
-				sensor_list[index].event_calc.now_event_need_handle = 1; //表示有事件需要下次处理
-			}
-		}	
-		//把第二包数据挪到第一包上
-		memcpy(p_event_packet_1,p_event_packet_2,size_2); 
-		sensor_list[index].sensor_data.sensor_event[0].size = sensor_list[index].sensor_data.sensor_event[1].size;
-		sensor_list[index].sensor_data.sensor_event[0].rev_slot_count = sensor_list[index].sensor_data.sensor_event[1].rev_slot_count;		
-				
+		}						
 	}
-	else
-	{
-		/* code */
-	}
+	//把第二包数据挪到第一包上
+	memcpy(p_event_packet_1,p_event_packet_2,size_2); 
+	sensor_list[index].sensor_data.sensor_event[0].size = sensor_list[index].sensor_data.sensor_event[1].size;
+	sensor_list[index].sensor_data.sensor_event[0].rev_slot_count = sensor_list[index].sensor_data.sensor_event[1].rev_slot_count;		
 	
 }
 
 
+void poll_event_need_handle(void)
+{
+	int32_t index;
+	for(index=0;index<SENSOR_MAX_COUNT; index++)
+	{
+		if(sensor_list[index].event_calc.now_event_need_handle == 1)
+		{
+			fcyz_delay_handle(index);
+		}	
+	}	
 
-//按照分车阈值来处理未处理的事件
+
+}
+
+//定时器中调用  按照分车阈值来处理未处理的事件 可能事件延迟送达，在这里可以进行立刻确认
 void fcyz_delay_handle(uint8_t index)
 {
+	int32_t ms_to_now;
+
+	if(sensor_list[index].event_calc.now_event_need_handle == 1)
+	{
+		//计算事件的持续的实际时间，通过接收时间和事件中的时间戳来综合计算
+		ms_to_now = calc_event_to_now_time(sensor_list[index].event_calc.event[1],sensor_list[index].event_calc.rev_slot_count[1]);
+		if(sensor_list[index].event_calc.event[1].blIsOn == E_OF)
+		{
+			if(ms_to_now > sensor_list[index].sensor_cfg.off_to_on_min_time) //大于分车阈值 OFF有效 OFF没有时间输出  ON有效
+			{
+				sensor_list[index].event_calc.event[0] = sensor_list[index].event_calc.event[1];
+				sensor_list[index].event_calc.rev_slot_count[0] = sensor_list[index].event_calc.rev_slot_count[1];						
+				sensor_list[index].event_calc.now_sensor_onoff = S_OFF;				
+				event_stat_handle(index);
+				sensor_list[index].event_calc.now_event_need_handle = 0;  //event 已经处理完成					
+			}
+		}
+		else
+		{
+			if(ms_to_now > sensor_list[index].sensor_cfg.on_delay) //大于on delay
+			{
+				sensor_list[index].event_calc.event[0] = sensor_list[index].event_calc.event[1];
+				sensor_list[index].event_calc.rev_slot_count[0] = sensor_list[index].event_calc.rev_slot_count[1];						
+				sensor_list[index].event_calc.now_sensor_onoff = S_ON;
+				event_stat_handle(index);
+				sensor_list[index].event_calc.now_event_need_handle = 0;  //event 已经处理完成					
+			}			
+		}
+		
+	}
 
 }
 
 
-int32_t calc_tow_event_time(SNP_EVENT_t e1,uint32_t rev_slot_count_1,SNP_EVENT_t e2,uint32_t rev_slot_count_1)
+//计算两个事件的实际时间，通过接收时间和事件中的时间戳来综合计算
+int32_t calc_two_event_time(SNP_EVENT_t e1,uint32_t rev_slot_count_1,SNP_EVENT_t e2,uint32_t rev_slot_count_2)
+{
+	int32_t rev_time_cha;  //数据接收相差的时间
+	int32_t ms_cha,ms_1,ms_2;
+
+	if(rev_slot_count_2 > rev_slot_count_1)
+		rev_time_cha = rev_slot_count_2 - rev_slot_count_1
+	else //时间槽计数器值满归0 或者别的异常则无法处理
+	{
+		rev_time_cha = (0xffffffff - rev_slot_count_2) + rev_slot_count_1;
+	}
+	
+	rev_time_cha = rev_time_cha/256/30;    //表示间隔几个30秒
+
+	ms_2 = (int32_t)((e2.bm_Sec * 1024) + e2.bm_Ms)*1000/1024;
+	ms_1 = (int32_t)((e1.bm_Sec * 1024) + e1.bm_Ms)*1000/1024;
+	ms_cha = ms_2 - ms_1;
+	if(ms_cha<0)
+		ms_cha += 30000;
+
+	if((ms_cha/30) < rev_time_cha)
+		ms_cha += (rev_time_cha - (ms_cha/30))*30000;
+	
+	return ms_cha;
+}
+
+//计算事件到现在的时间
+int32_t calc_event_to_now_time(SNP_EVENT_t e1,uint32_t rev_slot_count_1)
+{
+	int32_t now_sec,now_ms;
+	int32_t ms_cha;
+
+	now_sec = rf_syn.head.packet_seq%30;
+	now_ms = (rf_slot_count%64)*1000/256;
+
+	ms_cha = (now_sec*1000+now_ms) - (int32_t)((e1.bm_Sec * 1024) + e1.bm_Ms)*1000/1024;
+	if(ms_cha < 0)
+		ms_cha += 30000;
+
+	return ms_cha;
+}
+
+//完成ON OFF状态的统计和输出工作
+void event_stat_handle(uint8_t index)
 {
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

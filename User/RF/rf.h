@@ -88,7 +88,7 @@ typedef struct _rf_ack
 	uint8_t jump_ch_group;
 	uint16_t sensor_id;
 	uint8_t slot;
-	uint8_t ack_bit[6];
+	uint8_t ack_bit[7];
 	uint16_t crc;
 }struct_rf_ack;
 
@@ -141,6 +141,8 @@ typedef struct _sensor_list
 	uint16_t sensor_id;
 	struct 
 	{
+		uint16_t on_delay;          //ON事件 延迟一段时间后输出，
+		uint16_t off_to_on_min_time;  //分车阈值  表示OFF到ON的最小时间  如果小于这个时间 表示OFF是无效的
 		uint8_t lane;
 	}sensor_cfg; //参数配置
 	struct 
@@ -158,6 +160,7 @@ typedef struct _sensor_list
 		SNP_EVENT_t event[2]; //上一个事件（已经处理过）  和 未处理的事件（）
 		uint32_t rev_slot_count[2];  //收到的时间
 		uint8_t now_sensor_onoff;
+		int32_t onoff_time_ms;
 		#define S_ON 1
 		#define S_OFF 2
 		uint8_t now_event_need_handle; //是否有事件需要处理
