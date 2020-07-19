@@ -14,6 +14,22 @@
 #define BIT_RF2 (1<<1)
 
 
+#define JUMP_CH_COUNT    					30        //频道总数
+#define DEV_ID         						20201001
+#define FRAME_SLOT_COUNT        			64   				//64个slot表示一帧
+#define RF_NO_RX_REBOOT_TICKS   			(100*120)			//120秒
+
+#define RF_SEND_ERROR_REBOOT_COUNT   		100
+
+#define SENSOR_MAX_COUNT 					128
+
+#define PACKET_SEQ_MAX                      120
+
+#define SENSOR_SLOT_BEGIN                   6        //SENSOR 时间槽起始
+#define SENSOR_SLOT_END                    59        //SENSOR 时间槽结束
+
+
+
 // rf状态记录表
 typedef struct _rf_status_manage
 {
@@ -121,7 +137,7 @@ typedef struct _rf_stat
 	struct_rf_head head;
 	uint8_t slot;
 	uint16_t band_id;
-	uint8_t battary;
+	uint8_t battery;
 	int8_t rx_rssi;
 	union{
 		uint16_t addr;
@@ -143,8 +159,13 @@ typedef struct _sensor_list
 	{
 		uint16_t on_delay;          //ON事件 延迟一段时间后输出，
 		uint16_t off_to_on_min_time;  //分车阈值  表示OFF到ON的最小时间  如果小于这个时间 表示OFF是无效的
-		uint8_t lane;
+		uint8_t lane;      //车道号    从1开始
+		uint8_t lane_index;  //车道里的序号   从0开始
+		uint16_t distance; //距离前一个地磁的距离   毫米
+		uint8_t direction; //东南西北 方向
+		uint8_t lane_direction; //直行  左转 右转  掉头
 	}sensor_cfg; //参数配置
+	uint8_t slot;
 	struct 
 	{	
 		struct 
@@ -181,6 +202,19 @@ typedef struct _sensor_list
 		uint16_t lost_event_count; //通过包序号计算出丢了的事件个数
 		uint16_t resend_count[32];    //0表示重传总数
 	}sensor_stat;  //sensor 状态统计
+	
+	struct
+	{
+		uint8_t battery;
+		int8_t rx_rssi;
+		union{
+			uint16_t addr;
+			struct{
+			uint8_t h_version;
+			uint8_t s_version;
+			};
+		};			
+	}sensor_cfg_rev;
 	
 }struct_sensor_list;
 

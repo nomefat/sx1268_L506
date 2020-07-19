@@ -8,18 +8,10 @@
 #include "sx126x_hal.h"
 #include "radio.h"
 #include "rf.h"
+#include "stdio.h"
 
 
-#define JUMP_CH_COUNT    					30        //频道总数
-#define DEV_ID         						20201001
-#define FRAME_SLOT_COUNT        			64   				//64个slot表示一帧
-#define RF_NO_RX_REBOOT_TICKS   			(100*120)			//120秒
 
-#define RF_SEND_ERROR_REBOOT_COUNT   		100
-
-#define SENSOR_MAX_COUNT 					128
-
-#define PACKET_SEQ_MAX                      120
 
 
 
@@ -69,7 +61,11 @@ extern RadioStatus_t RadioStatus;
 extern osThreadId_t rf_callbackHandle;
 extern SX126x_t *p_sx126x;
 
+extern char debug_str[1024];
 
+
+
+extern void debug(const char* pstr);
 
 
 void OnTxDone( void );
@@ -112,8 +108,9 @@ int32_t calc_tow_event_time(SNP_EVENT_t e1,uint32_t rev_slot_count_1,SNP_EVENT_t
 
 void poll_event_need_handle(void);
 
-void event_stat_handle(uint8_t index,uint8_t now_sensor_onoff);
+void event_stat_handle(uint8_t index);
 
+int32_t calc_event_to_now_time(SNP_EVENT_t e1,uint32_t rev_slot_count_1);
 
 
 /*** CRC table for the CRC-16. The poly is 0x8005 (x^16 + x^15 + x^2 + 1) */
@@ -539,7 +536,7 @@ void rf_send_updata(uint8_t rf_index)
 void rf_send_ack(uint8_t rf_index)
 {
 	if(rf_ack.ack_bit[0] == 0 && rf_ack.ack_bit[1] == 0 && rf_ack.ack_bit[2] == 0 && rf_ack.ack_bit[3] == 0 
-				&& rf_ack.ack_bit[4] == 0 && rf_ack.ack_bit[5] == 0)
+				&& rf_ack.ack_bit[4] == 0 && rf_ack.ack_bit[5] == 0 && rf_ack.ack_bit[6] == 0)
 		return;
 
 	if(rf_index == RF1)
@@ -557,7 +554,15 @@ void rf_send_ack(uint8_t rf_index)
 
 	rf_ack.crc = crc16(0,(uint8_t*)&rf_ack,sizeof(rf_ack)-2);
 
-	rf_send(rf_index,&rf_ack,sizeof(rf_ack));		
+	rf_send(rf_index,&rf_ack,sizeof(rf_ack));	
+	sprintf(debug_str,"rf_%d: send ack %x %x %x %x %x %x sensor_id=%X slot=%d\r\n",rf_index,rf_ack.ack_bit[0],rf_ack.ack_bit[1],rf_ack.ack_bit[2],
+			rf_ack.ack_bit[3],rf_ack.ack_bit[4],rf_ack.ack_bit[5],rf_ack.ack_bit[6],rf_ack.sensor_id,rf_ack.slot);
+	debug(debug_str);	
+	if(rf_index == RF2)
+	{		
+		memset(rf_ack.ack_bit,0,7);
+		rf_ack.sensor_id = 0;
+	}		
 }
 
 void timer_sec(uint32_t t)
@@ -616,6 +621,14 @@ int32_t find_sensor_index(uint16_t sensor_id)
 }
 
 
+void set_ack_packet_bit(uint8_t slot)
+{
+	uint8_t index = slot - SENSOR_SLOT_BEGIN;
+
+	rf_ack.ack_bit[index/8] |= (1<<(index%8));
+
+}
+
 void rf_rev_packet_insert_list(uint8_t rf_index,void *pdata,uint8_t size, int16_t rssi, int8_t snr)
 {
 	uint16_t crc;
@@ -659,6 +672,16 @@ void rf_rev_packet_insert_list(uint8_t rf_index,void *pdata,uint8_t size, int16_
 		index = find_sensor_index(p_rf_event->head.dev_id); //找到索引
 		if(index != -1)
 		{
+			set_ack_packet_bit(rf_slot);
+			if(size >= 14)
+				sprintf(debug_str,"rf_%d: [%d:%d]rev event sensor_id=%X slot=%d resend=%d e1=%04X e2=%04X e3=%04X \r\n",rf_index,rssi,snr,p_rf_event->head.dev_id,rf_slot,p_rf_event->resend_count,p_rf_event->event[0].uiAll,p_rf_event->event[1].uiAll,p_rf_event->event[2].uiAll);
+			else if(size >= 12)
+				sprintf(debug_str,"rf_%d: [%d:%d]rev event sensor_id=%X slot=%d resend=%d e1=%04X e2=%04X \r\n",rf_index,rssi,snr,p_rf_event->head.dev_id,rf_slot,p_rf_event->resend_count,p_rf_event->event[0].uiAll,p_rf_event->event[1].uiAll);
+			else
+				sprintf(debug_str,"rf_%d: [%d:%d]rev event sensor_id=%X slot=%d resend=%d e1=%04X \r\n",rf_index,rssi,snr,p_rf_event->head.dev_id,rf_slot,p_rf_event->resend_count,p_rf_event->event[0].uiAll);
+			
+			debug(debug_str);	
+
 			if(sensor_list[index].sensor_data.sensor_event[0].size == 0) //第一包
 			{
 				sensor_list[index].sensor_data.sensor_event[0].size = size;  //前后数据数组都放入这一条数据
@@ -716,14 +739,55 @@ void rf_rev_packet_insert_list(uint8_t rf_index,void *pdata,uint8_t size, int16_
 			}
 			
 		}
+		else  //收到不在list中的sensor 事件包 先不做处理
+		{
+			/* code */
+		}
+		
 	}	
 	else if(p_rf_stat->head.packet_type == RF_S_STAT)
 	{
+		index = find_sensor_index(p_rf_stat->head.dev_id); //找到索引
+		if(index != -1)
+		{
+			sprintf(debug_str,"rf_%d: [%d:%d]rev stat sensor_id=%X slot=[%d->%d] seq=%d rev_rssi=%d bandid=%04X battery=%d hv=%d sv=%d\r\n",rf_index,rssi,snr,p_rf_stat->head.dev_id,rf_slot,p_rf_stat->slot,p_rf_stat->head.packet_seq,p_rf_stat->rx_rssi,p_rf_stat->band_id,p_rf_stat->battery,p_rf_stat->h_version,p_rf_stat->s_version);
+			
+			debug(debug_str);	
 
+			set_ack_packet_bit(rf_slot);
+			if(sensor_list[index].slot != p_rf_stat->slot || p_rf_stat->band_id != DEV_ID) //时间槽错误或者绑定ID错误
+			{
+				rf_ack.sensor_id = p_rf_stat->head.dev_id;
+				rf_ack.slot = sensor_list[index].slot;				
+			}
+			sensor_list[index].sensor_cfg_rev.battery = p_rf_stat->battery;
+			sensor_list[index].sensor_cfg_rev.rx_rssi = p_rf_stat->rx_rssi;
+			sensor_list[index].sensor_cfg_rev.h_version = p_rf_stat->h_version;
+			sensor_list[index].sensor_cfg_rev.s_version = p_rf_stat->s_version;									
+		}
+		else
+		{
+			if(p_rf_stat->band_id == DEV_ID)  //不在list中 但是绑定ID相同   下发解绑命令
+			{
+				set_ack_packet_bit(rf_slot);
+				rf_ack.sensor_id = p_rf_stat->head.dev_id;
+				rf_ack.slot = 0;					 //时间槽为0 表示解绑该sensor
+			}
+		}
+		
 	}
 	else if(p_rf_stat->head.packet_type == RF_S_UPDATA_ACK)
 	{
-
+		index = find_sensor_index(p_rf_event->head.dev_id); //找到索引
+		if(index != -1)
+		{
+			set_ack_packet_bit(rf_slot);
+		}
+		else
+		{
+			/* code */
+		}
+		
 	}			
 }
 
@@ -937,7 +1001,7 @@ void fcyz_delay_handle(uint8_t index)
 	{
 		//计算事件的持续的实际时间，通过接收时间和事件中的时间戳来综合计算
 		ms_to_now = calc_event_to_now_time(sensor_list[index].event_calc.event[1],sensor_list[index].event_calc.rev_slot_count[1]);
-		if(sensor_list[index].event_calc.event[1].blIsOn == E_OF)
+		if(sensor_list[index].event_calc.event[1].blIsOn == E_OFF)
 		{
 			if(ms_to_now > sensor_list[index].sensor_cfg.off_to_on_min_time) //大于分车阈值 OFF有效 OFF没有时间输出  ON有效
 			{
@@ -972,7 +1036,7 @@ int32_t calc_two_event_time(SNP_EVENT_t e1,uint32_t rev_slot_count_1,SNP_EVENT_t
 	int32_t ms_cha,ms_1,ms_2;
 
 	if(rev_slot_count_2 > rev_slot_count_1)
-		rev_time_cha = rev_slot_count_2 - rev_slot_count_1
+		rev_time_cha = rev_slot_count_2 - rev_slot_count_1;
 	else //时间槽计数器值满归0 或者别的异常则无法处理
 	{
 		rev_time_cha = (0xffffffff - rev_slot_count_2) + rev_slot_count_1;
@@ -980,8 +1044,8 @@ int32_t calc_two_event_time(SNP_EVENT_t e1,uint32_t rev_slot_count_1,SNP_EVENT_t
 	
 	rev_time_cha = rev_time_cha/256/30;    //表示间隔几个30秒
 
-	ms_2 = (int32_t)((e2.bm_Sec * 1024) + e2.bm_Ms)*1000/1024;
-	ms_1 = (int32_t)((e1.bm_Sec * 1024) + e1.bm_Ms)*1000/1024;
+	ms_2 = (int32_t)((e2.bmSec * 1024) + e2.bmMs)*1000/1024;
+	ms_1 = (int32_t)((e1.bmSec * 1024) + e1.bmMs)*1000/1024;
 	ms_cha = ms_2 - ms_1;
 	if(ms_cha<0)
 		ms_cha += 30000;
@@ -1001,7 +1065,7 @@ int32_t calc_event_to_now_time(SNP_EVENT_t e1,uint32_t rev_slot_count_1)
 	now_sec = rf_syn.head.packet_seq%30;
 	now_ms = (rf_slot_count%64)*1000/256;
 
-	ms_cha = (now_sec*1000+now_ms) - (int32_t)((e1.bm_Sec * 1024) + e1.bm_Ms)*1000/1024;
+	ms_cha = (now_sec*1000+now_ms) - (int32_t)((e1.bmSec * 1024) + e1.bmMs)*1000/1024;
 	if(ms_cha < 0)
 		ms_cha += 30000;
 

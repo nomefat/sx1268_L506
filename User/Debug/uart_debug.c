@@ -7,7 +7,7 @@
 #include "semphr.h"
 #include "stdio.h"
 #include "4g_app.h"
-
+#include "rf.h"
 
 
 
@@ -24,9 +24,11 @@ extern UART_HandleTypeDef DEBUG_UART;
 void callback_fun_help(int8_t *param);
 void sys_start_send(void);
 void set_server(int8_t *param);
+void add_sensor(int8_t *param);
+void list_sensor(int8_t *param);
 
 
-
+extern struct_sensor_list sensor_list[SENSOR_MAX_COUNT];
 
 
 extern struct_ip_port ip_port[MAX_CLIENT_COUNT];
@@ -65,6 +67,8 @@ CMD_CALLBACK_LIST_BEGIN
 
 CMD_CALLBACK("?",callback_fun_help)		
 CMD_CALLBACK("setip",set_server)	
+CMD_CALLBACK("add_sensor",add_sensor)
+CMD_CALLBACK("list",list_sensor)
 
 CMD_CALLBACK_LIST_END
 
@@ -333,4 +337,46 @@ void set_server(int8_t *param)
 	sprintf(debug_str,"s[%d] ip=%d.%d.%d.%d port=%d\r\n",index,ip[0],ip[1],ip[2],ip[3],port);
 	debug(debug_str);	
 }
+
+void add_sensor(int8_t *param)
+{
+	uint32_t index;
+	uint16_t sensor_id;
+	char *start_str ;
+	
+	sscanf((const char *)param,"%d %x",&index,&sensor_id);	
+
+	if(index >= 128)
+	{
+		start_str = "Error:sensor index must <128\r\n";
+		debug(start_str);	
+		return;
+	}	
+	sensor_list[index].sensor_id = sensor_id;
+	sensor_list[index].slot = index;
+
+}
+
+
+void list_sensor(int8_t *param)
+{
+	int32_t i;
+	for(i=0;i<SENSOR_MAX_COUNT; i++)
+	{
+		if(sensor_list[i].sensor_id != 0)
+		{
+			sprintf(debug_str,"[%d] id=%04X slot=%d lane=%d\r\n",i,sensor_list[i].sensor_id,sensor_list[i].slot,sensor_list[i].sensor_cfg.lane);
+			debug(debug_str);				
+		}		
+	}	
+
+}
+
+
+
+
+
+
+
+
 
