@@ -68,9 +68,9 @@ void SX126xReset( void )
 
 void SX126xWaitOnBusy( void )
 {
-	uint32_t delay = 10000;
-	while(delay--);
-    //while( HAL_GPIO_ReadPin( p_sx126x->BUSY.GPIOx, p_sx126x->BUSY.GPIO_Pin) == GPIO_PIN_SET );
+	//uint32_t delay = 10000;
+	//while(delay--);
+  while( HAL_GPIO_ReadPin( p_sx126x->BUSY.GPIOx, p_sx126x->BUSY.GPIO_Pin) == GPIO_PIN_SET );
 }
 
 void SX126xWakeup( void )

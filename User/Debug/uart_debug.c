@@ -136,7 +136,7 @@ void task_uart_debug_send(void *argument)
 	{
 		if(sbh_debug_send == NULL)
 		{			
-			sbh_debug_send = xStreamBufferCreate(1024,3);
+			sbh_debug_send = xStreamBufferCreate(4096,3);
 			if(sbh_debug_send!=NULL)
 			{
 				sys_start_send();
@@ -146,21 +146,22 @@ void task_uart_debug_send(void *argument)
 		}
 		else
 		{
-			rev_size = xStreamBufferReceive(sbh_debug_send,&send_data[0],128,xBlockTime);
-			if(rev_size>0)
+			if( mutex_huart3_hdmatx != NULL )
 			{
-				if( mutex_huart3_hdmatx != NULL )
+				if( xSemaphoreTake( mutex_huart3_hdmatx, pdMS_TO_TICKS(100) ) == pdTRUE )
 				{
-					if( xSemaphoreTake( mutex_huart3_hdmatx, pdMS_TO_TICKS(100) ) == pdTRUE )
-					{
+					rev_size = xStreamBufferReceive(sbh_debug_send,&send_data[0],128,xBlockTime);
+					if(rev_size>0)
+					{					
 						HAL_UART_Transmit_DMA(&DEBUG_UART,(uint8_t *)send_data,rev_size);
 					}
-					else //100MS 还没有发送成功 可能是DMA故障了   重启dma
-					{
+				}
+				else //100MS 还没有发送成功 可能是DMA故障了   重启dma
+				{
 
-					}
 				}
 			}
+			
 		}
 	}
 }
@@ -257,7 +258,7 @@ void task_uart_debug_rev_handle(void *argument)
 	{
 		if(sbh_debug_rev == NULL)  //内存不够分配  延时1秒后继续申请
 		{		
-			sbh_debug_rev = xStreamBufferCreate(1024,2);
+			sbh_debug_rev = xStreamBufferCreate(4096,2);
 			if(sbh_debug_rev != NULL) 
 				start_from_debug_dma_receive();
 			else

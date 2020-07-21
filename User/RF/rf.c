@@ -47,7 +47,7 @@ RadioEvents_t Radio_1_Events;
 RadioEvents_t Radio_2_Events;
 
 volatile uint32_t rf_slot_count;
-uint8_t rf_slot;
+volatile uint8_t rf_slot;
 uint32_t rf_timer_sec;
 
 
@@ -63,6 +63,7 @@ extern SX126x_t *p_sx126x;
 
 extern char debug_str[1024];
 
+extern TIM_HandleTypeDef htim2;
 
 extern void debug_isr(const char* pstr);
 extern void debug(const char* pstr);
@@ -337,6 +338,7 @@ void OnTxDone( void )
 	Radio.RxBoosted( 0);
 	RadioStatus = SX126xGetStatus();
 	rf_status_manage[RF1].rf_work_status = RadioStatus.Fields.ChipMode;	
+	debug_isr("rf0 send ok\r\n");	
 }
 
 void OnRxDone( uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr )
@@ -381,7 +383,8 @@ void OnTxDone2( void )
 	rf_set_ch(RF2,get_now_jump_ch());
 	Radio.RxBoosted( 0);
 	RadioStatus = SX126xGetStatus();
-	rf_status_manage[RF2].rf_work_status = RadioStatus.Fields.ChipMode;    
+	rf_status_manage[RF2].rf_work_status = RadioStatus.Fields.ChipMode; 
+	debug_isr("rf1 send ok\r\n");		
 }
 
 void OnRxDone2( uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr )
@@ -506,6 +509,8 @@ void rf_send_syn(uint8_t rf_index)
 	rf_syn.crc = crc16(0,(uint8_t *)&rf_syn,sizeof(rf_syn)-2);
 
 	rf_send(rf_index,&rf_syn,sizeof(rf_syn));	
+	sprintf(debug_str,"rf_%d: [%d %d]send syn id=%04X GRP=%d    ",rf_index,rf_slot,htim2.Instance->CNT/84,rf_syn.head.dev_id,rf_syn.jump_ch_group);
+	debug_isr(debug_str);		
 }
 
 
@@ -535,9 +540,9 @@ void rf_send_updata(uint8_t rf_index)
 
 void rf_send_ack(uint8_t rf_index)
 {
-	if(rf_ack.ack_bit[0] == 0 && rf_ack.ack_bit[1] == 0 && rf_ack.ack_bit[2] == 0 && rf_ack.ack_bit[3] == 0 
-				&& rf_ack.ack_bit[4] == 0 && rf_ack.ack_bit[5] == 0 && rf_ack.ack_bit[6] == 0)
-		return;
+//	if(rf_ack.ack_bit[0] == 0 && rf_ack.ack_bit[1] == 0 && rf_ack.ack_bit[2] == 0 && rf_ack.ack_bit[3] == 0 
+//				&& rf_ack.ack_bit[4] == 0 && rf_ack.ack_bit[5] == 0 && rf_ack.ack_bit[6] == 0)
+//		return;
 
 	if(rf_index == RF1)
 	{		
@@ -555,7 +560,7 @@ void rf_send_ack(uint8_t rf_index)
 	rf_ack.crc = crc16(0,(uint8_t*)&rf_ack,sizeof(rf_ack)-2);
 
 	rf_send(rf_index,&rf_ack,sizeof(rf_ack));	
-	sprintf(debug_str,"rf_%d: send ack %x %x %x %x %x %x sensor_id=%X slot=%d\r\n",rf_index,rf_ack.ack_bit[0],rf_ack.ack_bit[1],rf_ack.ack_bit[2],
+	sprintf(debug_str,"rf_%d: [%d %d]send ack %x %x %x %x %x %x sensor_id=%X slot=%d    ",rf_index,rf_slot,htim2.Instance->CNT/84,rf_ack.ack_bit[0],rf_ack.ack_bit[1],rf_ack.ack_bit[2],
 			rf_ack.ack_bit[3],rf_ack.ack_bit[4],rf_ack.ack_bit[5],rf_ack.ack_bit[6],rf_ack.sensor_id,rf_ack.slot);
 	debug_isr(debug_str);	
 	if(rf_index == RF2)
