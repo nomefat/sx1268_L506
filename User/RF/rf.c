@@ -601,7 +601,7 @@ void rf_timer(void)
 		case 60:   //ack包
 			rf_send_ack(RF1);
 			break;		
-		case 63:   //ack包
+		case 62:   //ack包
 			rf_send_ack(RF2);
 			break;				
 	}
