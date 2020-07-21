@@ -293,7 +293,9 @@ void debug(const char* pstr)
 void callback_fun_help(int8_t *param)
 {
 	char *help_str = "500M_Ap help:\r\n\
-[0]:setip [0-1] [x.x.x.x] [0-65535]       func:set server 0 or 1 ip and port\r\n";
+[0]:setip [0-1] [x.x.x.x] [0-65535]       func:set server 0 or 1 ip and port\r\n\
+[1]:add_sensor	[0-127] [sensor id hex]   func:set sensor id 0-127 hex\r\n\
+[2]:list                                  func: list sensor id and slot...\r\n";
 
 	debug(help_str);	
 }
@@ -353,7 +355,7 @@ void add_sensor(int8_t *param)
 		return;
 	}	
 	sensor_list[index].sensor_id = sensor_id;
-	sensor_list[index].slot = index;
+	sensor_list[index].slot = index+6;
 
 }
 

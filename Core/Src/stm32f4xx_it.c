@@ -457,11 +457,25 @@ void DMA2_Stream6_IRQHandler(void)
 void USART6_IRQHandler(void)
 {
   /* USER CODE BEGIN USART6_IRQn 0 */
+	int d;
 
+	if(DEBUG_UART.Instance == huart6.Instance)
+	{
+		if((((&huart6)->Instance->SR) & USART_SR_IDLE) != RESET)
+		{
+			uart_from_debug_idle_callback();		
+		}
+	}
   /* USER CODE END USART6_IRQn 0 */
   HAL_UART_IRQHandler(&huart6);
   /* USER CODE BEGIN USART6_IRQn 1 */
-
+	if(DEBUG_UART.Instance == huart6.Instance)
+	{	
+		if(((((&huart6)->Instance->SR) & USART_SR_ORE) != RESET))
+		{
+			d = (&huart6)->Instance->DR;
+		}
+	}
   /* USER CODE END USART6_IRQn 1 */
 }
 
