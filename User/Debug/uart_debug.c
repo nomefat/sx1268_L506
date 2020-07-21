@@ -289,6 +289,14 @@ void debug(const char* pstr)
 	xStreamBufferSend(sbh_debug_send,pstr,strlen(pstr),1);	
 }
 
+void debug_isr(const char* pstr)
+{
+	BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+
+	if(sbh_debug_send == NULL)
+		return;
+	xStreamBufferSendFromISR(sbh_debug_send,pstr,strlen(pstr),&xHigherPriorityTaskWoken);	
+}
 
 void callback_fun_help(int8_t *param)
 {

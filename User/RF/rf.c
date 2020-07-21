@@ -64,7 +64,7 @@ extern SX126x_t *p_sx126x;
 extern char debug_str[1024];
 
 
-
+extern void debug_isr(const char* pstr);
 extern void debug(const char* pstr);
 
 
@@ -557,7 +557,7 @@ void rf_send_ack(uint8_t rf_index)
 	rf_send(rf_index,&rf_ack,sizeof(rf_ack));	
 	sprintf(debug_str,"rf_%d: send ack %x %x %x %x %x %x sensor_id=%X slot=%d\r\n",rf_index,rf_ack.ack_bit[0],rf_ack.ack_bit[1],rf_ack.ack_bit[2],
 			rf_ack.ack_bit[3],rf_ack.ack_bit[4],rf_ack.ack_bit[5],rf_ack.ack_bit[6],rf_ack.sensor_id,rf_ack.slot);
-	debug(debug_str);	
+	debug_isr(debug_str);	
 	if(rf_index == RF2)
 	{		
 		memset(rf_ack.ack_bit,0,7);
