@@ -26,12 +26,15 @@ void sys_start_send(void);
 void set_server(int8_t *param);
 void add_sensor(int8_t *param);
 void list_sensor(int8_t *param);
+void print_syn(int8_t *param);
 
 
 extern struct_sensor_list sensor_list[SENSOR_MAX_COUNT];
 
 
 extern struct_ip_port ip_port[MAX_CLIENT_COUNT];
+
+extern uint8_t enable_print_syn;
 
 #define CCMRAM  __attribute__((section("CCMRAM")))
 
@@ -69,7 +72,7 @@ CMD_CALLBACK("?",callback_fun_help)
 CMD_CALLBACK("setip",set_server)	
 CMD_CALLBACK("add_sensor",add_sensor)
 CMD_CALLBACK("list",list_sensor)
-
+CMD_CALLBACK("print_syn",print_syn)
 CMD_CALLBACK_LIST_END
 
 
@@ -304,8 +307,8 @@ void callback_fun_help(int8_t *param)
 	char *help_str = "500M_Ap help:\r\n\
 [0]:setip [0-1] [x.x.x.x] [0-65535]       func:set server 0 or 1 ip and port\r\n\
 [1]:add_sensor	[0-127] [sensor id hex]   func:set sensor id 0-127 hex\r\n\
-[2]:list                                  func: list sensor id and slot...\r\n";
-
+[2]:list                                  func: list sensor id and slot...\r\n\
+[3]:print_syn [0-1]                       func: 0 close print syn ,1 open print syn\r\n"; 
 	debug(help_str);	
 }
 
@@ -383,7 +386,16 @@ void list_sensor(int8_t *param)
 
 }
 
+void print_syn(int8_t *param)
+{
+	uint32_t enable = 0;
 
+	sscanf((const char *)param,"%d",&enable);	
+
+	enable_print_syn = enable;
+	sprintf(debug_str,"print syn %d\r\n",enable_print_syn);
+	debug(debug_str);			
+}
 
 
 

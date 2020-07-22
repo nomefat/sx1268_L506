@@ -41,6 +41,8 @@ uint32_t random_num;
 
 int8_t rssi;
 
+uint8_t enable_print_syn;
+
 RadioError_t RadioError;
 
 RadioEvents_t Radio_1_Events;
@@ -509,8 +511,11 @@ void rf_send_syn(uint8_t rf_index)
 	rf_syn.crc = crc16(0,(uint8_t *)&rf_syn,sizeof(rf_syn)-2);
 
 	rf_send(rf_index,&rf_syn,sizeof(rf_syn));	
-	sprintf(debug_str,"rf_%d: [%d %d]send syn id=%04X GRP=%d    ",rf_index,rf_slot,htim2.Instance->CNT/84,rf_syn.head.dev_id,rf_syn.jump_ch_group);
-	debug_isr(debug_str);		
+	if(enable_print_syn)
+	{
+		sprintf(debug_str,"rf_%d: [%d %d]send syn id=%04X GRP=%d    ",rf_index,rf_slot,htim2.Instance->CNT/84,rf_syn.head.dev_id,rf_syn.jump_ch_group);
+		debug_isr(debug_str);	
+	}	
 }
 
 
@@ -540,9 +545,9 @@ void rf_send_updata(uint8_t rf_index)
 
 void rf_send_ack(uint8_t rf_index)
 {
-//	if(rf_ack.ack_bit[0] == 0 && rf_ack.ack_bit[1] == 0 && rf_ack.ack_bit[2] == 0 && rf_ack.ack_bit[3] == 0 
-//				&& rf_ack.ack_bit[4] == 0 && rf_ack.ack_bit[5] == 0 && rf_ack.ack_bit[6] == 0)
-//		return;
+	if(rf_ack.ack_bit[0] == 0 && rf_ack.ack_bit[1] == 0 && rf_ack.ack_bit[2] == 0 && rf_ack.ack_bit[3] == 0 
+				&& rf_ack.ack_bit[4] == 0 && rf_ack.ack_bit[5] == 0 && rf_ack.ack_bit[6] == 0)
+		return;
 
 	if(rf_index == RF1)
 	{		
