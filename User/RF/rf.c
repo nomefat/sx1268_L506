@@ -21,16 +21,29 @@ const uint32_t ch_freq_list[32] = {470000000, 471000000, 472000000, 473000000, 4
  480000000, 481000000, 482000000, 483000000, 484000000, 485000000, 486000000, 487000000, 488000000, 489000000, 490000000, 491000000, 492000000,
   493000000, 494000000, 495000000, 496000000, 497000000, 498000000, 499000000, 500000000, 501000000};
 
+// uint8_t ch_group[8][JUMP_CH_COUNT] = 
+// {
+//     {29, 4, 23, 9, 22, 20, 27, 1, 10, 13, 5, 6, 25, 18, 30, 11, 14, 24, 7, 15, 3, 2, 8, 12, 28, 17, 16, 19, 26, 21},
+//     {23, 1, 18, 17, 15, 13, 24, 20, 6, 22, 27, 5, 9, 12, 11, 7, 19, 28, 3, 25, 21, 30, 29, 10, 16, 8, 4, 26, 2, 14},
+//     {27, 12, 16, 30, 22, 14, 29, 6, 10, 3, 4, 20, 25, 28, 21, 9, 7, 13, 17, 23, 2, 8, 19, 1, 15, 18, 5, 24, 11, 26},
+//     {8, 25, 15, 4, 13, 23, 11, 2, 29, 9, 26, 21, 7, 19, 24, 10, 27, 17, 12, 18, 14, 16, 6, 20, 3, 5, 22, 30, 1, 28},
+//     {15, 22, 12, 29, 19, 26, 18, 13, 1, 14, 27, 24, 6, 20, 23, 21, 8, 11, 2, 4, 10, 25, 16, 5, 9, 7, 17, 3, 30, 28},
+//     {27, 15, 24, 7, 2, 22, 18, 12, 10, 3, 21, 16, 1, 28, 4, 19, 30, 29, 13, 20, 11, 25, 5, 8, 9, 26, 14, 6, 23, 17},
+//     {11, 12, 2, 20, 3, 15, 10, 6, 24, 22, 18, 25, 19, 23, 1, 8, 17, 13, 26, 27, 30, 28, 4, 9, 16, 29, 14, 5, 21, 7},
+//     {28, 17, 6, 5, 30, 10, 1, 29, 23, 4, 16, 18, 11, 2, 24, 22, 21, 19, 25, 20, 13, 27, 14, 8, 9, 7, 26, 12, 15, 3},
+// };
+
+
 uint8_t ch_group[8][JUMP_CH_COUNT] = 
 {
-    {29, 4, 23, 9, 22, 20, 27, 1, 10, 13, 5, 6, 25, 18, 30, 11, 14, 24, 7, 15, 3, 2, 8, 12, 28, 17, 16, 19, 26, 21},
-    {23, 1, 18, 17, 15, 13, 24, 20, 6, 22, 27, 5, 9, 12, 11, 7, 19, 28, 3, 25, 21, 30, 29, 10, 16, 8, 4, 26, 2, 14},
-    {27, 12, 16, 30, 22, 14, 29, 6, 10, 3, 4, 20, 25, 28, 21, 9, 7, 13, 17, 23, 2, 8, 19, 1, 15, 18, 5, 24, 11, 26},
-    {8, 25, 15, 4, 13, 23, 11, 2, 29, 9, 26, 21, 7, 19, 24, 10, 27, 17, 12, 18, 14, 16, 6, 20, 3, 5, 22, 30, 1, 28},
-    {15, 22, 12, 29, 19, 26, 18, 13, 1, 14, 27, 24, 6, 20, 23, 21, 8, 11, 2, 4, 10, 25, 16, 5, 9, 7, 17, 3, 30, 28},
-    {27, 15, 24, 7, 2, 22, 18, 12, 10, 3, 21, 16, 1, 28, 4, 19, 30, 29, 13, 20, 11, 25, 5, 8, 9, 26, 14, 6, 23, 17},
-    {11, 12, 2, 20, 3, 15, 10, 6, 24, 22, 18, 25, 19, 23, 1, 8, 17, 13, 26, 27, 30, 28, 4, 9, 16, 29, 14, 5, 21, 7},
-    {28, 17, 6, 5, 30, 10, 1, 29, 23, 4, 16, 18, 11, 2, 24, 22, 21, 19, 25, 20, 13, 27, 14, 8, 9, 7, 26, 12, 15, 3},
+    {6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6},
+    {6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6},
+    {6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6},
+    {6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6},
+    {6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6},
+    {6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6},
+    {6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6},
+    {6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6},
 };
 
 uint32_t now_ch;
@@ -565,13 +578,14 @@ void rf_send_ack(uint8_t rf_index)
 	rf_ack.crc = crc16(0,(uint8_t*)&rf_ack,sizeof(rf_ack)-2);
 
 	rf_send(rf_index,&rf_ack,sizeof(rf_ack));	
-	sprintf(debug_str,"rf_%d: [%d %d]send ack %x %x %x %x %x %x sensor_id=%X slot=%d    ",rf_index,rf_slot,htim2.Instance->CNT/84,rf_ack.ack_bit[0],rf_ack.ack_bit[1],rf_ack.ack_bit[2],
+	sprintf(debug_str,"rf_%d: [%d %d]send ack %x %x %x %x %x %x %x sensor_id=%X slot=%d    ",rf_index,rf_slot,htim2.Instance->CNT/84,rf_ack.ack_bit[0],rf_ack.ack_bit[1],rf_ack.ack_bit[2],
 			rf_ack.ack_bit[3],rf_ack.ack_bit[4],rf_ack.ack_bit[5],rf_ack.ack_bit[6],rf_ack.sensor_id,rf_ack.slot);
 	debug_isr(debug_str);	
 	if(rf_index == RF2)
 	{		
 		memset(rf_ack.ack_bit,0,7);
 		rf_ack.sensor_id = 0;
+		rf_ack.head.cmd = CMD_NONE;
 	}		
 }
 
@@ -684,11 +698,11 @@ void rf_rev_packet_insert_list(uint8_t rf_index,void *pdata,uint8_t size, int16_
 		{
 			set_ack_packet_bit(rf_slot);
 			if(size >= 14)
-				sprintf(debug_str,"rf_%d: [%d:%d]rev event sensor_id=%X slot=%d resend=%d e1=%04X e2=%04X e3=%04X \r\n",rf_index,rssi,snr,p_rf_event->head.dev_id,rf_slot,p_rf_event->resend_count,p_rf_event->event[0].uiAll,p_rf_event->event[1].uiAll,p_rf_event->event[2].uiAll);
+				sprintf(debug_str,"rf_%d: [%d:%d]rev event sensor_id=%X slot=%d->%d resend=%d e1=%04X e2=%04X e3=%04X \r\n",rf_index,rssi,snr,p_rf_event->head.dev_id,rf_slot,htim2.Instance->CNT/84,p_rf_event->resend_count,p_rf_event->event[0].uiAll,p_rf_event->event[1].uiAll,p_rf_event->event[2].uiAll);
 			else if(size >= 12)
-				sprintf(debug_str,"rf_%d: [%d:%d]rev event sensor_id=%X slot=%d resend=%d e1=%04X e2=%04X \r\n",rf_index,rssi,snr,p_rf_event->head.dev_id,rf_slot,p_rf_event->resend_count,p_rf_event->event[0].uiAll,p_rf_event->event[1].uiAll);
+				sprintf(debug_str,"rf_%d: [%d:%d]rev event sensor_id=%X slot=%d->%d resend=%d e1=%04X e2=%04X \r\n",rf_index,rssi,snr,p_rf_event->head.dev_id,rf_slot,htim2.Instance->CNT/84,p_rf_event->resend_count,p_rf_event->event[0].uiAll,p_rf_event->event[1].uiAll);
 			else
-				sprintf(debug_str,"rf_%d: [%d:%d]rev event sensor_id=%X slot=%d resend=%d e1=%04X \r\n",rf_index,rssi,snr,p_rf_event->head.dev_id,rf_slot,p_rf_event->resend_count,p_rf_event->event[0].uiAll);
+				sprintf(debug_str,"rf_%d: [%d:%d]rev event sensor_id=%X slot=%d->%d resend=%d e1=%04X \r\n",rf_index,rssi,snr,p_rf_event->head.dev_id,rf_slot,htim2.Instance->CNT/84,p_rf_event->resend_count,p_rf_event->event[0].uiAll);
 			
 			debug(debug_str);	
 
@@ -760,7 +774,7 @@ void rf_rev_packet_insert_list(uint8_t rf_index,void *pdata,uint8_t size, int16_
 		index = find_sensor_index(p_rf_stat->head.dev_id); //找到索引
 		if(index != -1)
 		{
-			sprintf(debug_str,"rf_%d: [%d:%d]rev stat sensor_id=%X slot=[%d->%d] seq=%d rev_rssi=%d bandid=%04X battery=%d hv=%d sv=%d\r\n",rf_index,rssi,snr,p_rf_stat->head.dev_id,rf_slot,p_rf_stat->slot,p_rf_stat->head.packet_seq,p_rf_stat->rx_rssi,p_rf_stat->band_id,p_rf_stat->battery,p_rf_stat->h_version,p_rf_stat->s_version);
+			sprintf(debug_str,"rf_%d: [%d:%d]rev stat sensor_id=%X slot=[%d->%d]->%d seq=%d rev_rssi=%d bandid=%04X battery=%d hv=%d sv=%d\r\n",rf_index,rssi,snr,p_rf_stat->head.dev_id,rf_slot,p_rf_stat->slot,htim2.Instance->CNT/84,p_rf_stat->head.packet_seq,p_rf_stat->rx_rssi,p_rf_stat->band_id,p_rf_stat->battery,p_rf_stat->h_version,p_rf_stat->s_version);
 			
 			debug(debug_str);	
 
@@ -768,7 +782,8 @@ void rf_rev_packet_insert_list(uint8_t rf_index,void *pdata,uint8_t size, int16_
 			if(sensor_list[index].slot != p_rf_stat->slot || p_rf_stat->band_id != DEV_ID) //时间槽错误或者绑定ID错误
 			{
 				rf_ack.sensor_id = p_rf_stat->head.dev_id;
-				rf_ack.slot = sensor_list[index].slot;				
+				rf_ack.slot = sensor_list[index].slot;		
+				rf_ack.head.cmd = CMD_SET_SLOT;		
 			}
 			sensor_list[index].sensor_cfg_rev.battery = p_rf_stat->battery;
 			sensor_list[index].sensor_cfg_rev.rx_rssi = p_rf_stat->rx_rssi;
@@ -777,10 +792,11 @@ void rf_rev_packet_insert_list(uint8_t rf_index,void *pdata,uint8_t size, int16_
 		}
 		else
 		{
-			if(p_rf_stat->band_id == DEV_ID)  //不在list中 但是绑定ID相同   下发解绑命令
+			if(p_rf_stat->band_id == (DEV_ID&0XFFFF))  //不在list中 但是绑定ID相同   下发解绑命令
 			{
 				set_ack_packet_bit(rf_slot);
 				rf_ack.sensor_id = p_rf_stat->head.dev_id;
+				rf_ack.head.cmd = CMD_CLEAR_BAND_ID;
 				rf_ack.slot = 0;					 //时间槽为0 表示解绑该sensor
 			}
 		}

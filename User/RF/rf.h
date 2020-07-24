@@ -74,6 +74,7 @@ typedef struct _rf_head
 		#define CMD_SET_SLOT       1
 		#define CMD_ADJUST         2
 		#define CMD_SET_UPDATA_MODE  3
+		#define CMD_CLEAR_BAND_ID   4
 	};
 	uint8_t packet_seq;
 }struct_rf_head;
