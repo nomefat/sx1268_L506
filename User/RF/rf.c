@@ -353,7 +353,10 @@ void OnTxDone( void )
 	Radio.RxBoosted( 0);
 	RadioStatus = SX126xGetStatus();
 	rf_status_manage[RF1].rf_work_status = RadioStatus.Fields.ChipMode;	
-	debug_isr("rf0 send ok\r\n");	
+	if(rf_slot == 0 && enable_print_syn == 0)
+		return;	
+	sprintf(debug_str,"rf0 send ok mode=%d\r\n",rf_status_manage[RF1].rf_work_status);
+	debug_isr(debug_str);	
 }
 
 void OnRxDone( uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr )
@@ -381,7 +384,7 @@ void OnRxTimeout( void )
 void OnRxError( void )
 {
     Radio.Standby( );
-
+	debug("**********************************************rf0 hal crc error\r\n");
 }
 
 void OnCadDone( bool channelActivityDetected)
@@ -399,7 +402,10 @@ void OnTxDone2( void )
 	Radio.RxBoosted( 0);
 	RadioStatus = SX126xGetStatus();
 	rf_status_manage[RF2].rf_work_status = RadioStatus.Fields.ChipMode; 
-	debug_isr("rf1 send ok\r\n");		
+	if(rf_slot == 1 && enable_print_syn == 0)
+		return;
+	sprintf(debug_str,"rf1 send ok mode=%d\r\n",rf_status_manage[RF2].rf_work_status);
+	debug_isr(debug_str);		
 }
 
 void OnRxDone2( uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr )
@@ -427,7 +433,7 @@ void OnRxTimeout2( void )
 void OnRxError2( void )
 {
     Radio.Standby( );
-
+	debug("**********************************************rf1 hal crc error\r\n");
 }
 
 void OnCadDone2( bool channelActivityDetected)
@@ -585,6 +591,7 @@ void rf_send_ack(uint8_t rf_index)
 	{		
 		memset(rf_ack.ack_bit,0,7);
 		rf_ack.sensor_id = 0;
+		rf_ack.slot = 0;
 		rf_ack.head.cmd = CMD_NONE;
 	}		
 }
@@ -672,8 +679,12 @@ void rf_rev_packet_insert_list(uint8_t rf_index,void *pdata,uint8_t size, int16_
 
 	crc = crc16(0,pdata,size-2);
 
-	if(crc != (((uint8_t *)pdata)[size-2]+(((uint8_t *)pdata)[size-1]<<8)))
+	if(crc != (((uint8_t *)pdata)[size-2]+(((uint8_t *)pdata)[size-1]<<8)) && p_rf_event->head.packet_type != RF_S_EVENT)
+	{
+		sprintf(debug_str,"rf_%d:**********************************************soft crc error\r\n",rf_index);
+		debug(debug_str);
 		return;
+	}
 
 	if(p_rf_syn->head.packet_type == RF1_AP_SYN || p_rf_syn->head.packet_type == RF2_AP_SYN)
 	{
@@ -774,12 +785,13 @@ void rf_rev_packet_insert_list(uint8_t rf_index,void *pdata,uint8_t size, int16_
 		index = find_sensor_index(p_rf_stat->head.dev_id); //找到索引
 		if(index != -1)
 		{
+			set_ack_packet_bit(rf_slot);
 			sprintf(debug_str,"rf_%d: [%d:%d]rev stat sensor_id=%X slot=[%d->%d]->%d seq=%d rev_rssi=%d bandid=%04X battery=%d hv=%d sv=%d\r\n",rf_index,rssi,snr,p_rf_stat->head.dev_id,rf_slot,p_rf_stat->slot,htim2.Instance->CNT/84,p_rf_stat->head.packet_seq,p_rf_stat->rx_rssi,p_rf_stat->band_id,p_rf_stat->battery,p_rf_stat->h_version,p_rf_stat->s_version);
 			
 			debug(debug_str);	
 
-			set_ack_packet_bit(rf_slot);
-			if(sensor_list[index].slot != p_rf_stat->slot || p_rf_stat->band_id != DEV_ID) //时间槽错误或者绑定ID错误
+			
+			if(sensor_list[index].slot != p_rf_stat->slot || p_rf_stat->band_id != (DEV_ID&0XFFFF)) //时间槽错误或者绑定ID错误
 			{
 				rf_ack.sensor_id = p_rf_stat->head.dev_id;
 				rf_ack.slot = sensor_list[index].slot;		

@@ -19,7 +19,7 @@
 #define FRAME_SLOT_COUNT        			64   				//64个slot表示一帧
 #define RF_NO_RX_REBOOT_TICKS   			(100*120)			//120秒
 
-#define RF_SEND_ERROR_REBOOT_COUNT   		100
+#define RF_SEND_ERROR_REBOOT_COUNT   		10
 
 #define SENSOR_MAX_COUNT 					128
 
