@@ -379,7 +379,13 @@ void list_sensor(int8_t *param)
 	{
 		if(sensor_list[i].sensor_id != 0)
 		{
-			sprintf(debug_str,"[%d] id=%04X slot=%d lane=%d\r\n",i,sensor_list[i].sensor_id,sensor_list[i].slot,sensor_list[i].sensor_cfg.lane);
+			sprintf(debug_str,"[%d] id=%04X slot=%d lane=%d rev_e=%d lost_e=%d rssi=%d:%d snr=%d:%d rs=%d rs_1->31=%d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d \r\n",i,sensor_list[i].sensor_id,sensor_list[i].slot,sensor_list[i].sensor_cfg.lane,
+					sensor_list[i].sensor_stat.event_count,sensor_list[i].sensor_stat.lost_event_count,sensor_list[i].sensor_stat.rssi_avg[0],sensor_list[i].sensor_stat.rssi_avg[1],sensor_list[i].sensor_stat.snr_avg[0],sensor_list[i].sensor_stat.snr_avg[1],sensor_list[i].sensor_stat.resend_count[0],
+					sensor_list[i].sensor_stat.resend_count[1],sensor_list[i].sensor_stat.resend_count[2],sensor_list[i].sensor_stat.resend_count[3],sensor_list[i].sensor_stat.resend_count[4],sensor_list[i].sensor_stat.resend_count[5],sensor_list[i].sensor_stat.resend_count[6],sensor_list[i].sensor_stat.resend_count[7],
+					sensor_list[i].sensor_stat.resend_count[8],sensor_list[i].sensor_stat.resend_count[9],sensor_list[i].sensor_stat.resend_count[10],sensor_list[i].sensor_stat.resend_count[11],sensor_list[i].sensor_stat.resend_count[12],sensor_list[i].sensor_stat.resend_count[13],sensor_list[i].sensor_stat.resend_count[14],
+					sensor_list[i].sensor_stat.resend_count[15],sensor_list[i].sensor_stat.resend_count[16],sensor_list[i].sensor_stat.resend_count[17],sensor_list[i].sensor_stat.resend_count[18],sensor_list[i].sensor_stat.resend_count[19],sensor_list[i].sensor_stat.resend_count[20],sensor_list[i].sensor_stat.resend_count[21],
+					sensor_list[i].sensor_stat.resend_count[22],sensor_list[i].sensor_stat.resend_count[23],sensor_list[i].sensor_stat.resend_count[24],sensor_list[i].sensor_stat.resend_count[25],sensor_list[i].sensor_stat.resend_count[26],sensor_list[i].sensor_stat.resend_count[27],sensor_list[i].sensor_stat.resend_count[28],
+					sensor_list[i].sensor_stat.resend_count[29],sensor_list[i].sensor_stat.resend_count[30],sensor_list[i].sensor_stat.resend_count[31]);
 			debug(debug_str);				
 		}		
 	}	
