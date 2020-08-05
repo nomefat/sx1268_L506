@@ -681,7 +681,7 @@ void rf_rev_packet_insert_list(uint8_t rf_index,void *pdata,uint8_t size, int16_
 
 	if(crc != p_rf_syn->head.crc )
 	{
-		sprintf(debug_str,"rf_%d:**********************************************soft crc error id=%04X type=%d\r\n",rf_index,p_rf_event->head.packet_seq,p_rf_event->head.dev_id);
+		sprintf(debug_str,"rf_%d:[%d:%d]**********************************************soft crc error id=%04X type=%d\r\n",rf_index,rssi,snr,p_rf_event->head.packet_seq,p_rf_event->head.dev_id);
 		debug(debug_str);
 		return;
 	}
