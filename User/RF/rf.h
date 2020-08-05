@@ -53,6 +53,7 @@ typedef struct _rf_status_manage
 
 typedef struct _rf_head
 {
+	uint16_t crc;
 	uint16_t dev_id;
 	struct 
 	{
@@ -85,7 +86,6 @@ typedef struct _rf_syn
 {
 	struct_rf_head head;
 	uint8_t jump_ch_group;
-	uint16_t crc;
 }struct_rf_syn;
 
 
@@ -94,7 +94,6 @@ typedef struct _rf_updata
 	struct_rf_head head;
 	uint16_t addr;
 	uint8_t data[32];
-	uint16_t crc;
 }struct_rf_updata;
 
 
@@ -106,7 +105,6 @@ typedef struct _rf_ack
 	uint16_t sensor_id;
 	uint8_t slot;
 	uint8_t ack_bit[7];
-	uint16_t crc;
 }struct_rf_ack;
 
 
@@ -129,7 +127,6 @@ typedef struct _rf_event
 	uint8_t slot;
 	uint8_t resend_count;
 	SNP_EVENT_t event[1]; //可变长度 10 12 14 
-	uint16_t crc;
 }struct_rf_event;
 
 
@@ -147,7 +144,6 @@ typedef struct _rf_stat
 		uint8_t s_version;
 		};
 	};	
-	uint16_t crc;
 }struct_rf_stat;
 
 
