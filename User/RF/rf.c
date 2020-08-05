@@ -527,7 +527,7 @@ void rf_send_syn(uint8_t rf_index)
 	rf_syn.head.cmd = CMD_NONE;
 	rf_syn.head.dev_id = DEV_ID&0xffff;;
 	rf_syn.jump_ch_group = DEV_ID%8;
-	rf_syn.crc = crc16(0,(uint8_t *)&rf_syn,sizeof(rf_syn)-2);
+	rf_syn.head.crc = crc16(0,(uint8_t *)&rf_syn.head.dev_id,sizeof(rf_syn)-2);
 
 	rf_send(rf_index,&rf_syn,sizeof(rf_syn));	
 	if(enable_print_syn)
@@ -556,7 +556,7 @@ void rf_send_updata(uint8_t rf_index)
 	rf_updata.head.dev_id = DEV_ID&0xffff;;
 	rf_updata.head.packet_seq = rf_syn.head.packet_seq;
 
-	rf_updata.crc = crc16(0,(uint8_t *)&rf_updata,sizeof(rf_updata)-2);
+	rf_updata.head.crc = crc16(0,(uint8_t *)&rf_updata.head.dev_id,sizeof(rf_updata)-2);
 
 	rf_send(rf_index,&rf_updata,sizeof(rf_updata));		
 }
@@ -581,7 +581,7 @@ void rf_send_ack(uint8_t rf_index)
 	rf_ack.head.dev_id = DEV_ID&0xffff;
 	rf_ack.head.packet_seq = rf_syn.head.packet_seq;
 
-	rf_ack.crc = crc16(0,(uint8_t*)&rf_ack,sizeof(rf_ack)-2);
+	rf_ack.head.crc = crc16(0,(uint8_t*)&rf_ack.head.dev_id,sizeof(rf_ack)-2);
 
 	rf_send(rf_index,&rf_ack,sizeof(rf_ack));	
 	sprintf(debug_str,"rf_%d: [%d %d]send ack %x %x %x %x %x %x %x sensor_id=%X slot=%d    ",rf_index,rf_slot,htim2.Instance->CNT/84,rf_ack.ack_bit[0],rf_ack.ack_bit[1],rf_ack.ack_bit[2],
@@ -677,11 +677,11 @@ void rf_rev_packet_insert_list(uint8_t rf_index,void *pdata,uint8_t size, int16_
 	if(size <3)
 		return;
 
-	crc = crc16(0,pdata+2,size-2);
+	crc = crc16(0,(uint8_t *)pdata+2,size-2);
 
 	if(crc != p_rf_syn->head.crc )
 	{
-		sprintf(debug_str,"rf_%d:**********************************************soft crc error\r\n",rf_index);
+		sprintf(debug_str,"rf_%d:**********************************************soft crc error id=%04X type=%d\r\n",rf_index,p_rf_event->head.packet_seq,p_rf_event->head.dev_id);
 		debug(debug_str);
 		return;
 	}
@@ -709,11 +709,11 @@ void rf_rev_packet_insert_list(uint8_t rf_index,void *pdata,uint8_t size, int16_
 		{
 			set_ack_packet_bit(rf_slot);
 			if(size >= 14)
-				sprintf(debug_str,"rf_%d: [%d:%d]rev event sensor_id=%X slot=%d->%d seq=%d resend=%d e1=%04X e2=%04X e3=%04X \r\n",rf_index,rssi,snr,p_rf_event->head.dev_id,rf_slot,p_rf_event->head.packet_seq,htim2.Instance->CNT/84,p_rf_event->resend_count,p_rf_event->event[0].uiAll,p_rf_event->event[1].uiAll,p_rf_event->event[2].uiAll);
+				sprintf(debug_str,"rf_%d: [%d:%d]rev event sensor_id=%X slot=%d->%d seq=%d resend=%d e1=%04X e2=%04X e3=%04X \r\n",rf_index,rssi,snr,p_rf_event->head.dev_id,rf_slot,htim2.Instance->CNT/84,p_rf_event->head.packet_seq,p_rf_event->resend_count,p_rf_event->event[0].uiAll,p_rf_event->event[1].uiAll,p_rf_event->event[2].uiAll);
 			else if(size >= 12)
-				sprintf(debug_str,"rf_%d: [%d:%d]rev event sensor_id=%X slot=%d->%d seq=%d resend=%d e1=%04X e2=%04X \r\n",rf_index,rssi,snr,p_rf_event->head.dev_id,rf_slot,p_rf_event->head.packet_seq,htim2.Instance->CNT/84,p_rf_event->resend_count,p_rf_event->event[0].uiAll,p_rf_event->event[1].uiAll);
+				sprintf(debug_str,"rf_%d: [%d:%d]rev event sensor_id=%X slot=%d->%d seq=%d resend=%d e1=%04X e2=%04X \r\n",rf_index,rssi,snr,p_rf_event->head.dev_id,rf_slot,htim2.Instance->CNT/84,p_rf_event->head.packet_seq,p_rf_event->resend_count,p_rf_event->event[0].uiAll,p_rf_event->event[1].uiAll);
 			else
-				sprintf(debug_str,"rf_%d: [%d:%d]rev event sensor_id=%X slot=%d->%d seq=%d resend=%d e1=%04X \r\n",rf_index,rssi,snr,p_rf_event->head.dev_id,rf_slot,p_rf_event->head.packet_seq,htim2.Instance->CNT/84,p_rf_event->resend_count,p_rf_event->event[0].uiAll);
+				sprintf(debug_str,"rf_%d: [%d:%d]rev event sensor_id=%X slot=%d->%d seq=%d resend=%d e1=%04X \r\n",rf_index,rssi,snr,p_rf_event->head.dev_id,rf_slot,htim2.Instance->CNT/84,p_rf_event->head.packet_seq,p_rf_event->resend_count,p_rf_event->event[0].uiAll);
 			
 			debug(debug_str);	
 
