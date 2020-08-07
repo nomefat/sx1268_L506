@@ -682,7 +682,7 @@ void rf_rev_packet_insert_list(uint8_t rf_index,void *pdata,uint8_t size, int16_
 
 	if(crc != p_rf_syn->head.crc )
 	{
-		sprintf(debug_str,"rf_%d:[%d:%d] [%x %x %x %x %x %x %x %x %x %x %x %x %x %x ]soft crc error id=%04X type=%d\r\n",rf_index,rssi,snr,p[0],p[1],p[2],p[3],p[4],p[5],p[6],p[7],p[8],p[9],p[10],p[11],p[12],p[13],p[14],
+		sprintf(debug_str,"rf_%d:[%d:%d] [%x %x %x %x %x %x %x %x %x %x %x %x %x %x ]soft crc error id=%04X type=%d\r\n",rf_index,rssi,snr,p[0],p[1],p[2],p[3],p[4],p[5],p[6],p[7],p[8],p[9],p[10],p[11],p[12],p[13],
 			p_rf_event->head.dev_id,p_rf_event->head.packet_type);
 		debug(debug_str);
 		return;
