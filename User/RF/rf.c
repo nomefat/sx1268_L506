@@ -532,7 +532,7 @@ void rf_send_syn(uint8_t rf_index)
 	rf_send(rf_index,&rf_syn,sizeof(rf_syn));	
 	if(enable_print_syn)
 	{
-		sprintf(debug_str,"rf_%d: [%d %d]send syn id=%04X GRP=%d    ",rf_index,rf_slot,htim2.Instance->CNT/84,rf_syn.head.dev_id,rf_syn.jump_ch_group);
+		sprintf(debug_str,"rf_%d: [%d %d]send syn id=%04X seq=%d GRP=%d    ",rf_index,rf_slot,htim2.Instance->CNT/84,rf_syn.head.dev_id,rf_syn.head.packet_seq,rf_syn.jump_ch_group);
 		debug_isr(debug_str);	
 	}	
 }
