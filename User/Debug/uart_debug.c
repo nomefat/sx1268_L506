@@ -158,10 +158,12 @@ void task_uart_debug_send(void *argument)
 					{					
 						HAL_UART_Transmit_DMA(&DEBUG_UART,(uint8_t *)send_data,rev_size);
 					}
+					else
+						xSemaphoreGive( mutex_huart3_hdmatx);
 				}
 				else //100MS 还没有发送成功 可能是DMA故障了   重启dma
 				{
-
+					xSemaphoreGive( mutex_huart3_hdmatx);
 				}
 			}
 			
