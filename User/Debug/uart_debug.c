@@ -293,9 +293,15 @@ void task_uart_debug_rev_handle(void *argument)
 
 void debug(const char* pstr)
 {
+	uint16_t len;
+
 	if(sbh_debug_send == NULL)
 		return;
-	xStreamBufferSend(sbh_debug_send,pstr,strlen(pstr),1);	
+
+	len = strlen(pstr);
+	if(len>1024)
+		len = 1024;
+	xStreamBufferSend(sbh_debug_send,pstr,len,1);	
 }
 
 void debug_isr(const char* pstr)

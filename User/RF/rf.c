@@ -861,7 +861,7 @@ void rf_event_first_handle(uint8_t index)
 
 	event_num = (size_2 - 8)/2; //实际有的事件数
 	lost_event_count = seq_cha - event_num;
-	if(lost_event_count>0)
+	if(lost_event_count>0 && sensor_list[index].sensor_stat.event_count != 0)
 		sensor_list[index].sensor_stat.lost_event_count += lost_event_count;
 
 	if(event_num>seq_cha && seq_cha!=0) //抛弃重复数据 ,seq_cha==0是第一包数据  不做该处理
