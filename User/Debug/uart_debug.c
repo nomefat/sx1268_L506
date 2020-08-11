@@ -100,15 +100,16 @@ void start_from_debug_dma_receive()
 ***********************************************************************************************/
 void uart_from_debug_idle_callback()
 {
+	HAL_GPIO_WritePin(S3_R_GPIO_Port,S3_R_Pin,GPIO_PIN_RESET);
 	HAL_DMA_Abort((&DEBUG_UART)->hdmarx);
 	DEBUG_UART.RxState = HAL_UART_STATE_READY;
 	DEBUG_UART.hdmarx->State = HAL_DMA_STATE_READY;
 	//huart6[0] = Q_LEN-DMA1_Stream1->NDTR;
 	//memcpy(debug_uart_buff+1,(char*)debug_uart_dma_buff,Q_LEN-DMA1_Stream1->NDTR);
-	
+
 	xStreamBufferSendFromISR(sbh_debug_rev,debug_uart_dma_buff,Q_LEN-DEBUG_UART.hdmarx->Instance->NDTR,NULL);
 	HAL_UART_Receive_DMA(&DEBUG_UART,debug_uart_dma_buff,Q_LEN);	 //??DMA??
-
+	HAL_GPIO_WritePin(S3_R_GPIO_Port,S3_R_Pin,GPIO_PIN_SET);
 }
 
 
@@ -121,6 +122,7 @@ void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
 		if(mutex_huart3_hdmatx != NULL)
 		{
 			xSemaphoreGiveFromISR( mutex_huart3_hdmatx,NULL);
+			HAL_GPIO_WritePin(S4_R_GPIO_Port,S4_R_Pin,GPIO_PIN_SET);
 		}
 	}
 }
@@ -156,6 +158,7 @@ void task_uart_debug_send(void *argument)
 					rev_size = xStreamBufferReceive(sbh_debug_send,&send_data[0],128,xBlockTime);
 					if(rev_size>0)
 					{					
+						HAL_GPIO_WritePin(S4_R_GPIO_Port,S4_R_Pin,GPIO_PIN_RESET);
 						HAL_UART_Transmit_DMA(&DEBUG_UART,(uint8_t *)send_data,rev_size);
 					}
 					else

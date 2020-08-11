@@ -380,6 +380,7 @@ int32_t g4_status_manage()
 		gprs_uart_send_string(AT_CMD_AT_CGREG);
 		start_str = "4g_set:send at cgreg\r\n";
 		debug(start_str);		
+		gprs_stat.send_at_cmd_times++;
 		if(gprs_stat.send_at_cmd_times>30)	
 		{
 			gprs_stat.send_at_cmd_times = 0;
@@ -392,6 +393,7 @@ int32_t g4_status_manage()
 		gprs_uart_send_string(AT_CMD_AT_CEREG);
 		start_str = "4g_set:send at cereg\r\n";
 		debug(start_str);	
+		gprs_stat.send_at_cmd_times++;
 		if(gprs_stat.send_at_cmd_times>30)	
 		{
 			gprs_stat.send_at_cmd_times = 0;
@@ -414,6 +416,7 @@ int32_t g4_status_manage()
 			gprs_stat.send_at_cmd_times = 0;
 			gprs_stat.reboot_flag = GPRS_REBOOT_SETP0;			//¹ØGSMµçÔ´
 		}
+		gprs_stat.send_at_cmd_times++;
 		gprs_uart_send_string(AT_CMD_4GAT_NETOPEN);  
 		start_str = "4g_set:send at netopen\r\n";
 		debug(start_str);			
