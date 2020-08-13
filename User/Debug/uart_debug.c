@@ -73,6 +73,7 @@ CMD_CALLBACK("setip",set_server)
 CMD_CALLBACK("add_sensor",add_sensor)
 CMD_CALLBACK("list",list_sensor)
 CMD_CALLBACK("print_syn",print_syn)
+CMD_CALLBACK("clear",clear)
 CMD_CALLBACK_LIST_END
 
 
@@ -401,6 +402,20 @@ void list_sensor(int8_t *param)
 		}		
 	}	
 
+}
+
+
+void clear(int8_t *param)
+{
+	int32_t i;
+	for(i=0;i<SENSOR_MAX_COUNT; i++)
+	{
+		if(sensor_list[i].sensor_id != 0)
+		{
+			memset(sensor_list[i].sensor_stat,0,sizeof(sensor_list[i].sensor_stat));
+		}
+	}
+	debug("clear ok\r\n");
 }
 
 void print_syn(int8_t *param)
