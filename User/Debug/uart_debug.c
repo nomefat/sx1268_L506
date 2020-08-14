@@ -27,7 +27,7 @@ void set_server(int8_t *param);
 void add_sensor(int8_t *param);
 void list_sensor(int8_t *param);
 void print_syn(int8_t *param);
-
+void clear(int8_t *param);
 
 extern struct_sensor_list sensor_list[SENSOR_MAX_COUNT];
 
@@ -185,6 +185,19 @@ int32_t get_line_to_handle(uint8_t *str_data)
 	int8_t find_str_fun = 0;
 	int32_t ret;
 	
+	for(;;)
+	{
+		if(str_data[0] == '\r' || str_data[0] == '\n') 
+		{
+			memcpy(str_data,&str_data[1],127);
+		}
+		else
+		{
+			break;
+		}
+		
+	}
+
 	for(i=0;i<128;i++)
 	{
 		if(str_data[i] == ' ' && param_start == 0) //找到这个说明是带参数的命令
@@ -295,14 +308,24 @@ void task_uart_debug_rev_handle(void *argument)
 void debug(const char* pstr)
 {
 	uint16_t len;
-
+	static SemaphoreHandle_t mutex = NULL;
+	
+	if(SemaphoreHandle_t mutex == NULL)
+	{
+		mutex = xSemaphoreCreateMutex();
+	}
+	
 	if(sbh_debug_send == NULL)
 		return;
 
-	len = strlen(pstr);
-	if(len>1024)
-		len = 1024;
-	xStreamBufferSend(sbh_debug_send,pstr,len,1);	
+	if(pdTRUE == xSemaphoreTake(mutex))
+	{
+		len = strlen(pstr);
+		if(len>1024)
+			len = 1024;
+		xStreamBufferSend(sbh_debug_send,pstr,len,0);	
+		xSemaphoreGive(mutex);
+	}
 }
 
 void debug_isr(const char* pstr)
@@ -412,7 +435,7 @@ void clear(int8_t *param)
 	{
 		if(sensor_list[i].sensor_id != 0)
 		{
-			memset(sensor_list[i].sensor_stat,0,sizeof(sensor_list[i].sensor_stat));
+			memset(&sensor_list[i].sensor_stat,0,sizeof(sensor_list[i].sensor_stat));
 		}
 	}
 	debug("clear ok\r\n");
