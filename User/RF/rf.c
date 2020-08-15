@@ -356,7 +356,7 @@ void OnTxDone( void )
 	if(rf_slot == 0 && enable_print_syn == 0)
 		return;	
 	sprintf(debug_str,"rf0 send ok mode=%d\r\n",rf_status_manage[RF1].rf_work_status);
-	debug_isr(debug_str);	
+	debug(debug_str);	
 }
 
 void OnRxDone( uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr )
@@ -405,7 +405,7 @@ void OnTxDone2( void )
 	if(rf_slot == 1 && enable_print_syn == 0)
 		return;
 	sprintf(debug_str,"rf1 send ok mode=%d\r\n",rf_status_manage[RF2].rf_work_status);
-	debug_isr(debug_str);		
+	debug(debug_str);		
 }
 
 void OnRxDone2( uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr )
@@ -843,7 +843,7 @@ void rf_event_first_handle(uint8_t index)
 	int8_t i;
 	int8_t seq_cha;
 	int8_t event_num;
-	uint8_t lost_event_count;
+	int8_t lost_event_count;
 	uint8_t size_2;
 	uint32_t event_time;
 
@@ -859,7 +859,9 @@ void rf_event_first_handle(uint8_t index)
 
 	event_num = (size_2 - 8)/2; //实际有的事件数
 	lost_event_count = seq_cha - event_num;
-	if(lost_event_count>0)
+	if(lost_event_count<0)
+		lost_event_count = 0;
+	if(lost_event_count>0 && sensor_list[index].sensor_stat.event_count != 0)
 		sensor_list[index].sensor_stat.lost_event_count += lost_event_count;
 
 	if(event_num>seq_cha && seq_cha!=0) //抛弃重复数据 ,seq_cha==0是第一包数据  不做该处理
