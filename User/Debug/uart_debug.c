@@ -27,7 +27,7 @@ void set_server(int8_t *param);
 void add_sensor(int8_t *param);
 void list_sensor(int8_t *param);
 void print_syn(int8_t *param);
-
+void debug(const char* pstr);
 
 extern struct_sensor_list sensor_list[SENSOR_MAX_COUNT];
 
@@ -247,16 +247,102 @@ int32_t get_line_to_handle(uint8_t *str_data)
 	return ret;
 }
 
+//func:从StreamBuffer中读一行数据，依据\r或者\n都判断为行结束 返回数据剔除\r \n 自动剔除无效的\r\n
+//return  NULL 表示没有读到， 非NULL 表示字符串起点
+int8_t * get_line(StreamBufferHandle_t sbh,int8_t *p_str,uint16_t size)
+{
+	static uint16_t str_end = 0;          // 字符串终止位置，将\r 或者\n 替换为0
+	static uint16_t str_data_index = 0;   //缓冲中字符串的个数
+	uint16_t rev_size;
+	
+	if(p_str[str_end] == 0 && str_data_index > 0) //已经成功返回过一行字符串，这里需要把这个处理过的字符串剔除
+	{
+		memcpy(p_str,&p_str[str_end+1],size-str_end-1);
+		str_data_index -= (str_end+1);
+		str_end = 0;
+	} 
+	if(str_data_index >= size) //缓冲区满 去掉第一个字节
+	{
+		memcpy(p_str,&p_str[1],size-1);	
+		str_data_index--;	
+		return NULL;
+	}
+	for(str_end=0;str_end<str_data_index;str_end++)//剔除只有\r \n 没有实体数据
+	{
+		if(p_str[str_end] == '\r' || p_str[str_end] == '\n')
+		{
+			p_str[str_end] = 0;
+			if(str_end == 0) //只有\r \n 没有实体数据
+				return NULL;
+			else
+				return p_str;
+		}	
+	}
 
+	rev_size = xStreamBufferReceive(sbh_debug_rev,&p_str[str_data_index],size-str_data_index,pdMS_TO_TICKS( 10000 ));
+	if(rev_size > 0)
+	{
+		str_data_index += rev_size;
+
+		for(str_end=0;str_end<str_data_index;str_end++)
+		{
+			if(p_str[str_end] == '\r' || p_str[str_end] == '\n')
+			{
+				p_str[str_end] = 0;
+				if(str_end == 0) //只有\r \n 没有实体数据
+					return NULL;
+				else
+					return p_str;
+			}
+		}
+		//没有找到\r或者\n
+		str_end = 0;
+		return NULL;
+	}
+
+}
+
+void str_cmd_hanle(char *str_data)
+{
+	uint16_t i = 0;
+	uint16_t param_start = 0;
+
+	for(;;)
+	{
+		if(str_data[i] == ' ' ) //找到这个说明是带参数的命令
+		{
+			str_data[i] = 0;
+			param_start = i+1;
+			break;
+		}
+		if(str_data[i] == 0 ) //找到这个说明是无参数的命令
+		{	
+			break;
+		}
+		i++;			
+	}
+	for(i=0;i<sizeof(cmd_list)/sizeof(struct _cmd_list);i++)
+	{
+		if(strcmp((char *)str_data,cmd_list[i].cmd)==0)
+		{
+			if(param_start == 0)
+				cmd_list[i].func(NULL);
+			else
+				cmd_list[i].func((int8_t *)&str_data[param_start]);
+			break;
+		}
+	}
+}
 
 void task_uart_debug_rev_handle(void *argument)
 {
 
-	uint8_t str_data[128];  //默认一条数据不能大于128  否则将会丢弃
+	int8_t str_data[128];  //默认一条数据不能大于128  否则将会丢弃
 	uint8_t str_data_index = 0;
 	const TickType_t xBlockTime = pdMS_TO_TICKS( 10000 );
 	uint8_t rev_size;
 	int32_t glth_ret = 0;
+	int8_t *p;
 
 	memset(str_data,0,128);
 	for(;;)
@@ -271,16 +357,21 @@ void task_uart_debug_rev_handle(void *argument)
 		}
 		else
 		{
-			rev_size = xStreamBufferReceive(sbh_debug_rev,&str_data[str_data_index],128-str_data_index,xBlockTime);
-			if(rev_size > 0)
+			p = get_line(sbh_debug_rev,str_data,128);
+			if(p)
 			{
-				do
-				{
-					glth_ret = get_line_to_handle(str_data);
-				}
-				while(glth_ret == -1);//读取一行字符串 进行处理 多余的数据跟下一条数据合并
-				str_data_index = glth_ret;
+				str_cmd_hanle(p);
 			}
+			// rev_size = xStreamBufferReceive(sbh_debug_rev,&str_data[str_data_index],128-str_data_index,xBlockTime);
+			// if(rev_size > 0)
+			// {
+			// 	do
+			// 	{
+			// 		glth_ret = get_line_to_handle(str_data);
+			// 	}
+			// 	while(glth_ret == -1);//读取一行字符串 进行处理 多余的数据跟下一条数据合并
+			// 	str_data_index = glth_ret;
+			// }
 		}
 		
 	}	
@@ -290,9 +381,17 @@ void task_uart_debug_rev_handle(void *argument)
 
 void debug(const char* pstr)
 {
+	uint16_t len;
+	
 	if(sbh_debug_send == NULL)
 		return;
-	xStreamBufferSend(sbh_debug_send,pstr,strlen(pstr),1);	
+	
+	len = strlen(pstr);
+	if(len >1024)
+		len = 1024;
+	if(len == 0)
+		return;
+	xStreamBufferSend(sbh_debug_send,pstr,len,1);	
 }
 
 void debug_isr(const char* pstr)
