@@ -628,14 +628,7 @@ void rf_timer(void)
 		case 4:     //1 2 升级包
 			rf_send_updata(RF2);
 			break;	
-			
-		case 58:   //ack包
-			rf_init(RF1);
-			break;		
-		case 59:   //ack包
-			rf_init(RF2);
-			break;	
-
+	
 		case 60:   //ack包
 			rf_send_ack(RF1);
 			break;		

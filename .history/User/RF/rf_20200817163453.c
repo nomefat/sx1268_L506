@@ -628,14 +628,7 @@ void rf_timer(void)
 		case 4:     //1 2 升级包
 			rf_send_updata(RF2);
 			break;	
-			
-		case 58:   //ack包
-			rf_init(RF1);
-			break;		
-		case 59:   //ack包
-			rf_init(RF2);
-			break;	
-
+	
 		case 60:   //ack包
 			rf_send_ack(RF1);
 			break;		
@@ -697,8 +690,8 @@ void rf_rev_packet_insert_list(uint8_t rf_index,void *pdata,uint8_t size, int16_
 
 	if(p_rf_syn->head.packet_type == RF1_AP_SYN || p_rf_syn->head.packet_type == RF2_AP_SYN)
 	{
-		// sprintf(debug_str,"rf_%d:[%d:%d] rev syn  id=%04X type=%d seq=%d \r\n",rf_index,rssi,snr,p_rf_syn->head.dev_id,p_rf_syn->head.packet_type,p_rf_syn->head.packet_seq);
-		// debug(debug_str);
+		sprintf(debug_str,"rf_%d:[%d:%d] rev syn  id=%04X type=%d seq=%d \r\n",rf_index,rssi,snr,p_rf_syn->head.dev_id,p_rf_syn->head.packet_type,p_rf_syn->head.packet_seq);
+		debug(debug_str);
 	}
 	else if(p_rf_updata->head.packet_type == RF1_AP_UPDATA || p_rf_updata->head.packet_type == RF2_AP_UPDATA)
 	{
@@ -706,8 +699,8 @@ void rf_rev_packet_insert_list(uint8_t rf_index,void *pdata,uint8_t size, int16_
 	}
 	else if(p_rf_ack->head.packet_type == RF1_AP_ACK || p_rf_ack->head.packet_type == RF2_AP_ACK)
 	{
-		// sprintf(debug_str,"rf_%d:[%d:%d] rev ack  id=%04X type=%d seq=%d \r\n",rf_index,rssi,snr,p_rf_syn->head.dev_id,p_rf_syn->head.packet_type,p_rf_syn->head.packet_seq);
-		// debug(debug_str);
+		sprintf(debug_str,"rf_%d:[%d:%d] rev ack  id=%04X type=%d seq=%d \r\n",rf_index,rssi,snr,p_rf_syn->head.dev_id,p_rf_syn->head.packet_type,p_rf_syn->head.packet_seq);
+		debug(debug_str);
 	}	
 	else if(p_rf_event->head.packet_type == RF_S_EVENT)//事件包
 	{

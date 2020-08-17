@@ -401,7 +401,7 @@ void debug(const char* pstr)
 	uint16_t len;
 	static SemaphoreHandle_t mutex = NULL;
 	
-	if(mutex == NULL)
+	if(SemaphoreHandle_t mutex == NULL)
 	{
 		mutex = xSemaphoreCreateMutex();
 	}
@@ -409,7 +409,7 @@ void debug(const char* pstr)
 	if(sbh_debug_send == NULL)
 		return;
 
-	if(pdTRUE == xSemaphoreTake(mutex,0))
+	if(pdTRUE == xSemaphoreTake(mutex))
 	{
 		len = strlen(pstr);
 		if(len>1024)
