@@ -28,8 +28,6 @@ void add_sensor(int8_t *param);
 void list_sensor(int8_t *param);
 void print_syn(int8_t *param);
 void clear(int8_t *param);
-void setapid(int8_t *param);
-
 
 extern struct_sensor_list sensor_list[SENSOR_MAX_COUNT];
 
@@ -76,7 +74,6 @@ CMD_CALLBACK("add_sensor",add_sensor)
 CMD_CALLBACK("list",list_sensor)
 CMD_CALLBACK("print_syn",print_syn)
 CMD_CALLBACK("clear",clear)
-CMD_CALLBACK("setapid",setapid)
 CMD_CALLBACK_LIST_END
 
 
@@ -484,12 +481,9 @@ void set_server(int8_t *param)
 	debug(debug_str);	
 }
 
-extern uint32_t DEV_ID;
 void setapid(int8_t *param)
 {
-	DEV_ID = sscanf((const char *)param,"%X",DEV_ID);
-	sprintf(debug_str,"set apid:%04X\r\n",DEV_ID);
-	debug(debug_str);		
+	
 }
 
 

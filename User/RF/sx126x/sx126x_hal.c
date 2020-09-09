@@ -84,7 +84,7 @@ void SX126xWakeup( void )
 	data[0] = RADIO_GET_STATUS;
 	data[1] = 0;
 	
-	HAL_SPI_Transmit(&p_sx126x->Spi,data,2,1);
+	HAL_SPI_Transmit(&p_sx126x->Spi,data,2,2);
 
 	HAL_GPIO_WritePin( p_sx126x->Nss.GPIOx, p_sx126x->Nss.GPIO_Pin,GPIO_PIN_SET);
 
@@ -104,9 +104,9 @@ void SX126xWriteCommand( RadioCommands_t command, uint8_t *buffer, uint16_t size
 	
    HAL_GPIO_WritePin( p_sx126x->Nss.GPIOx, p_sx126x->Nss.GPIO_Pin,GPIO_PIN_RESET);
 
-   HAL_SPI_Transmit(&p_sx126x->Spi,data,1,1);
+   HAL_SPI_Transmit(&p_sx126x->Spi,data,1,2);
 
-	 HAL_SPI_Transmit(&p_sx126x->Spi,buffer,size,1);
+	 HAL_SPI_Transmit(&p_sx126x->Spi,buffer,size,2);
 
    HAL_GPIO_WritePin( p_sx126x->Nss.GPIOx, p_sx126x->Nss.GPIO_Pin,GPIO_PIN_SET);
 
@@ -127,9 +127,9 @@ void SX126xReadCommand( RadioCommands_t command, uint8_t *buffer, uint16_t size 
 	data[0] = command;
 	data[1] = 0;
 	
-	HAL_SPI_Transmit(&p_sx126x->Spi,data,2,1);
+	HAL_SPI_Transmit(&p_sx126x->Spi,data,2,2);
 	
-	HAL_SPI_TransmitReceive(&p_sx126x->Spi,buffer,buffer,size,1);
+	HAL_SPI_TransmitReceive(&p_sx126x->Spi,buffer,buffer,size,2);
 
   HAL_GPIO_WritePin( p_sx126x->Nss.GPIOx, p_sx126x->Nss.GPIO_Pin,GPIO_PIN_SET);
 
@@ -148,9 +148,9 @@ void SX126xWriteRegisters( uint16_t address, uint8_t *buffer, uint16_t size )
 	data[1] = ( address & 0xFF00 ) >> 8 ;	
 	data[2] = address & 0x00FF;	
 
-	HAL_SPI_Transmit(&p_sx126x->Spi,data,3,1);
+	HAL_SPI_Transmit(&p_sx126x->Spi,data,3,2);
 	
-	HAL_SPI_Transmit(&p_sx126x->Spi,buffer,size,1);
+	HAL_SPI_Transmit(&p_sx126x->Spi,buffer,size,2);
 
 	HAL_GPIO_WritePin( p_sx126x->Nss.GPIOx, p_sx126x->Nss.GPIO_Pin,GPIO_PIN_SET);
 
@@ -176,9 +176,9 @@ void SX126xReadRegisters( uint16_t address, uint8_t *buffer, uint16_t size )
 	data[2] = address & 0x00FF;	
 	data[3] = 0;
 	
-	HAL_SPI_Transmit(&p_sx126x->Spi,data,4,1);
+	HAL_SPI_Transmit(&p_sx126x->Spi,data,4,2);
 	
-	HAL_SPI_TransmitReceive(&p_sx126x->Spi,buffer,buffer,size,1);
+	HAL_SPI_TransmitReceive(&p_sx126x->Spi,buffer,buffer,size,2);
 
 	HAL_GPIO_WritePin( p_sx126x->Nss.GPIOx, p_sx126x->Nss.GPIO_Pin,GPIO_PIN_SET);
 
@@ -203,9 +203,9 @@ void SX126xWriteBuffer( uint8_t offset, uint8_t *buffer, uint8_t size )
 	data[0] = RADIO_WRITE_BUFFER;
 	data[1] = offset;
 	
-	HAL_SPI_Transmit(&p_sx126x->Spi,data,2,1);
+	HAL_SPI_Transmit(&p_sx126x->Spi,data,2,2);
 
-	HAL_SPI_Transmit(&p_sx126x->Spi,buffer,size,1);
+	HAL_SPI_Transmit(&p_sx126x->Spi,buffer,size,2);
 
 	HAL_GPIO_WritePin( p_sx126x->Nss.GPIOx, p_sx126x->Nss.GPIO_Pin,GPIO_PIN_SET);
 
@@ -224,9 +224,9 @@ void SX126xReadBuffer( uint8_t offset, uint8_t *buffer, uint8_t size )
 	data[1] = offset ;	
 	data[2] = 0;		
 
-	HAL_SPI_Transmit(&p_sx126x->Spi,data,3,1);
+	HAL_SPI_Transmit(&p_sx126x->Spi,data,3,2);
 	
-	HAL_SPI_TransmitReceive(&p_sx126x->Spi,buffer,buffer,size,1);
+	HAL_SPI_TransmitReceive(&p_sx126x->Spi,buffer,buffer,size,2);
 
 	HAL_GPIO_WritePin( p_sx126x->Nss.GPIOx, p_sx126x->Nss.GPIO_Pin,GPIO_PIN_SET);
 

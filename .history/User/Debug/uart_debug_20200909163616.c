@@ -28,8 +28,6 @@ void add_sensor(int8_t *param);
 void list_sensor(int8_t *param);
 void print_syn(int8_t *param);
 void clear(int8_t *param);
-void setapid(int8_t *param);
-
 
 extern struct_sensor_list sensor_list[SENSOR_MAX_COUNT];
 

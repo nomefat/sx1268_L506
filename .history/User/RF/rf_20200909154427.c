@@ -14,7 +14,7 @@
 
 
 
-uint32_t DEV_ID = 0x12345678;
+
 
 
 const uint32_t ch_freq_list[41] = {470000000, 471000000, 472000000, 473000000, 474000000, 475000000, 476000000, 477000000, 478000000, 479000000,
@@ -717,11 +717,11 @@ void rf_rev_packet_insert_list(uint8_t rf_index,void *pdata,uint8_t size, int16_
 		{
 			set_ack_packet_bit(rf_slot);
 			if(size >= 14)
-				sprintf(debug_str,"rf_%d: [%d:%d]rev event sensor_id=%X slot=%d->%d seq=%d resend=%d bk_rssi=%d e1=%d:%d e2=%04X e3=%04X \r\n",rf_index,rssi,snr,p_rf_event->head.dev_id,rf_slot,htim2.Instance->CNT/84,p_rf_event->head.packet_seq,p_rf_event->resend_count,p_rf_event->background_rssi ,p_rf_event->event[0].uiAll & 0xff,(p_rf_event->event[0].uiAll>>8) & 0xff,p_rf_event->event[1].uiAll,p_rf_event->event[2].uiAll);
+				sprintf(debug_str,"rf_%d: [%d:%d]rev event sensor_id=%X slot=%d->%d seq=%d resend=%d e1=%04X e2=%04X e3=%04X \r\n",rf_index,rssi,snr,p_rf_event->head.dev_id,rf_slot,htim2.Instance->CNT/84,p_rf_event->head.packet_seq,p_rf_event->resend_count,p_rf_event->event[0].uiAll,p_rf_event->event[1].uiAll,p_rf_event->event[2].uiAll);
 			else if(size >= 12)
-				sprintf(debug_str,"rf_%d: [%d:%d]rev event sensor_id=%X slot=%d->%d seq=%d resend=%d bk_rssi=%d e1=%d:%d e2=%04X \r\n",rf_index,rssi,snr,p_rf_event->head.dev_id,rf_slot,htim2.Instance->CNT/84,p_rf_event->head.packet_seq,p_rf_event->resend_count,p_rf_event->background_rssi ,,p_rf_event->event[0].uiAll & 0xff,(p_rf_event->event[0].uiAll>>8) & 0xff,p_rf_event->event[1].uiAll);
+				sprintf(debug_str,"rf_%d: [%d:%d]rev event sensor_id=%X slot=%d->%d seq=%d resend=%d e1=%04X e2=%04X \r\n",rf_index,rssi,snr,p_rf_event->head.dev_id,rf_slot,htim2.Instance->CNT/84,p_rf_event->head.packet_seq,p_rf_event->resend_count,p_rf_event->event[0].uiAll,p_rf_event->event[1].uiAll);
 			else
-				sprintf(debug_str,"rf_%d: [%d:%d]rev event sensor_id=%X slot=%d->%d seq=%d resend=%d bk_rssi=%d e1=%d:%d \r\n",rf_index,rssi,snr,p_rf_event->head.dev_id,rf_slot,htim2.Instance->CNT/84,p_rf_event->head.packet_seq,p_rf_event->resend_count,p_rf_event->background_rssi ,p_rf_event->event[0].uiAll & 0xff,(p_rf_event->event[0].uiAll>>8) & 0xff);
+				sprintf(debug_str,"rf_%d: [%d:%d]rev event sensor_id=%X slot=%d->%d seq=%d resend=%d e1=%04X \r\n",rf_index,rssi,snr,p_rf_event->head.dev_id,rf_slot,htim2.Instance->CNT/84,p_rf_event->head.packet_seq,p_rf_event->resend_count,p_rf_event->event[0].uiAll);
 			
 			debug(debug_str);	
 

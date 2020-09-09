@@ -15,7 +15,7 @@
 
 
 #define JUMP_CH_COUNT    					30        //频道总数
-//#define DEV_ID         						20201001
+#define DEV_ID         						20201001
 #define FRAME_SLOT_COUNT        			64   				//64个slot表示一帧
 #define RF_NO_RX_REBOOT_TICKS   			(100*120)			//120秒
 
@@ -126,7 +126,6 @@ typedef struct _rf_event
 	struct_rf_head head;
 	uint8_t slot;
 	uint8_t resend_count;
-	int8_t background_rssi;
 	SNP_EVENT_t event[1]; //可变长度 10 12 14 
 }struct_rf_event;
 

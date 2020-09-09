@@ -15,7 +15,7 @@
 
 
 #define JUMP_CH_COUNT    					30        //频道总数
-//#define DEV_ID         						20201001
+#define DEV_ID         						20201001
 #define FRAME_SLOT_COUNT        			64   				//64个slot表示一帧
 #define RF_NO_RX_REBOOT_TICKS   			(100*120)			//120秒
 
