@@ -84,11 +84,14 @@ void start_from_gprs_dma_receive()
 ***********************************************************************************************/
 void uart_from_gprs_idle_callback()
 {
+	uint16_t len;
 	HAL_DMA_Abort((&huart2)->hdmarx);
 	huart2.RxState = HAL_UART_STATE_READY;
 	huart2.hdmarx->State = HAL_DMA_STATE_READY;
 	
-	xStreamBufferSendFromISR(sbh_4g_str_rev,gprs_receive_dma_buff,GPRS_RCV_DMA_BUFF_LENGTH-DMA1_Stream5->NDTR,NULL);
+	len = GPRS_RCV_DMA_BUFF_LENGTH-DMA1_Stream5->NDTR;
+	if(len>0)
+		xStreamBufferSendFromISR(sbh_4g_str_rev,gprs_receive_dma_buff,len,NULL);
 	
 	HAL_UART_Receive_DMA(&huart2,gprs_receive_dma_buff,GPRS_RCV_DMA_BUFF_LENGTH);	 //打开DMA接收
 		

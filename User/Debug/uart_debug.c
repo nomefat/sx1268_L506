@@ -101,14 +101,16 @@ void start_from_debug_dma_receive()
 ***********************************************************************************************/
 void uart_from_debug_idle_callback()
 {
+	uint16_t len;
 	HAL_GPIO_WritePin(S3_R_GPIO_Port,S3_R_Pin,GPIO_PIN_RESET);
 	HAL_DMA_Abort((&DEBUG_UART)->hdmarx);
 	DEBUG_UART.RxState = HAL_UART_STATE_READY;
 	DEBUG_UART.hdmarx->State = HAL_DMA_STATE_READY;
 	//huart6[0] = Q_LEN-DMA1_Stream1->NDTR;
 	//memcpy(debug_uart_buff+1,(char*)debug_uart_dma_buff,Q_LEN-DMA1_Stream1->NDTR);
-
-	xStreamBufferSendFromISR(sbh_debug_rev,debug_uart_dma_buff,Q_LEN-DEBUG_UART.hdmarx->Instance->NDTR,NULL);
+	len = Q_LEN-DEBUG_UART.hdmarx->Instance->NDTR;
+	if(len > 0)
+		xStreamBufferSendFromISR(sbh_debug_rev,debug_uart_dma_buff,len,NULL);
 	HAL_UART_Receive_DMA(&DEBUG_UART,debug_uart_dma_buff,Q_LEN);	 //??DMA??
 	HAL_GPIO_WritePin(S3_R_GPIO_Port,S3_R_Pin,GPIO_PIN_SET);
 }
